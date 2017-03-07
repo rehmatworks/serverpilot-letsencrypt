@@ -32,12 +32,6 @@ if [ -z "$theAction" ]
 	exit
 fi
 
-if [ -z "$appName" ]
-	then
-	echo -e "\e[31mPlease provide the app name\e[39m"
-	exit
-fi
-
 if [ -z "$domainName" ]
 	then
 	echo -e "\e[31mPlease provide the domain name\e[39m"
@@ -55,6 +49,11 @@ if [ "$theAction" == "uninstall" ]; then
 	sudo service nginx-sp reload
 	echo -e "\e[31mSSL has been removed. If you are seeing errors on your site, then please fix HTACCESS file and remove the rules that you added to force SSL\e[39m"
 elif [ "$theAction" == "install" ]; then
+	if [ -z "$appName" ]
+		then
+		echo -e "\e[31mPlease provide the app name\e[39m"
+		exit
+	fi
 	sudo service nginx-sp stop
 	echo -e "\e[32mChecks passed, press enter to continue\e[39m"
 	if [ "$domainType" == "main" ]; then
