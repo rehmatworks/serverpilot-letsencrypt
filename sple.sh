@@ -1,11 +1,11 @@
 #!/bin/bash
-#################################################
+echo "#################################################
 #						#
 #	This script automates the installation	#
 #	of Let's Encrypt SSL certificates on	#
 #	your ServerPilot free plan		#
 #						#
-#################################################
+#################################################"
 
 theAction=$1
 domainName=$2
