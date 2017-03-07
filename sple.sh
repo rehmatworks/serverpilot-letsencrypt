@@ -51,7 +51,7 @@ if [ ! -d "$spAppRoot" ]
 fi
 
 if [ "$theAction" == "uninstall" ]; then
-	sudo rm "$spSSLDir$appName.ssl.conf" &>/dev/null
+	sudo rm "$spSSLDir$appName-ssl.conf" &>/dev/null
 	sudo service nginx-sp reload
 	echo -e "\e[31mSSL has been removed. If you are seeing errors on your site, then please fix HTACCESS file and remove the rules that you added to force SSL\e[39m"
 elif [ "$theAction" == "install" ]; then
@@ -91,7 +91,7 @@ elif [ "$theAction" == "install" ]; then
 
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.nonssl_conf;
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
-}" > "$spSSLDir$appName.ssl.conf"
+}" > "$spSSLDir$appName-ssl.conf"
 
 sudo service nginx-sp start && sudo service nginx-sp reload
 	echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
