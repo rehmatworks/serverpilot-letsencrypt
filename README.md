@@ -20,15 +20,21 @@ When you will run the above command, the repo will be cloned to your system and 
 ## Install SSL
 Here are the simple steps to install SSL on your apps
 #### For main domains (Don't include www with your domain)
+```bash
 rwssl install example.com app_name main
-
+```
 In above example, you can see that I've passed four arguments to rwssl command. The first argument tells the script to install the SSL. Second argument is the domain name. Third argument is the app name of your domain and fourth argument tells either this is a sub domain or the main domain.
 
 ### For sub domains
+```bash
 rwssl install sub.example.com app_name sub
+```
 
 ## Uninstall SSL
+```bash
 rwssl uninstall example.com
+```
+```bash
 rwssl uninstall sub.example.com
-
+```
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
