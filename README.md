@@ -13,7 +13,7 @@ If git isn't installed on your system, then install it first by typing this in t
 ```
 and then run this command to clone the reposity
 ```bash
-sudo git clone https://github.com/rehmatworks/serverpilot-letsencrypt/ && cd serverpilot-letsencrypt && mv sple.sh /usr/local/bin/rwssl && chmod +x /usr/local/bin/rwssl
+sudo git clone https://github.com/rehmatworks/serverpilot-letsencrypt/ && cd serverpilot-letsencrypt && sudo mv sple.sh /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl
 ```
 When you will run the above command, the repo will be cloned to your system and the script will be copied to /usr/local/bin and will be made executable. After that, you can execute it easily.
 
