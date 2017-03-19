@@ -37,4 +37,6 @@ rwssl uninstall example.com
 ```bash
 rwssl uninstall sub.example.com
 ```
+
+### ***** Reboot your server by typing reboot in terminal or from your server's control panel if you can't access the sites after installing the SSL. In some cases, a deault Apache page may come up and a reboot will fix this issue ****
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
