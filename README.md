@@ -32,9 +32,9 @@ rwssl install sub.example.com app_name sub
 
 ## Uninstall SSL
 ```bash
-rwssl uninstall example.com
+rwssl uninstall example.com app_name
 ```
 ```bash
-rwssl uninstall sub.example.com
+rwssl uninstall sub.example.com app_name
 ```
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
