@@ -22,7 +22,7 @@ if ! hash letsencrypt 2>/dev/null; then
 		sudo chmod a+x certbot-auto  &>/dev/null
 		sudo mv certbot-auto /usr/local/bin/letsencrypt  &>/dev/null
 	else
-		sudo apt-get install -y letsencrypt letsencrypt-*  &>/dev/null
+		sudo apt-get install -y letsencrypt  &>/dev/null
 	fi
 fi
 
