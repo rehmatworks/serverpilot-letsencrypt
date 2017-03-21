@@ -58,14 +58,18 @@ elif [ "$theAction" == "install" ]; then
 	sudo service nginx-sp stop
 	echo -e "\e[32mChecks passed, press enter to continue\e[39m"
 	if [ "$domainType" == "main" ]; then
-		letsencrypt certonly --register-unsafely-without-email --agree-tos -d $domainName -d www.$domainName >/dev/null
+		thecommand="letsencrypt certonly --register-unsafely-without-email --agree-tos -d $domainName -d www.$domainName"
 	elif [[ "$domainType" == "sub" ]]; then
-		letsencrypt certonly --register-unsafely-without-email --agree-tos -d $domainName >/dev/null
+		thecommand="letsencrypt certonly --register-unsafely-without-email --agree-tos -d $domainName"
 	else
 		echo -e "\e[31mDomain type not provided. Should be either main or sub\e[39m"
 		exit
 	fi
-	sudo echo "server {
+	output=$(eval $thecommand 2>&1)
+	if [[ "$output" == *"too many requests"* ]]; then
+		echo "Let's Encrypt SSL limit reached. Please wait for a few days before obtaining more SSLs for $domainName"
+	elif [[ "$output" == *"Congratulations"* ]]; then
+		sudo echo "server {
 	listen 443 ssl;
 	listen [::]:443 ssl;
 	server_name
@@ -93,15 +97,20 @@ elif [ "$theAction" == "install" ]; then
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
 }" > "$spSSLDir$appName-ssl.conf"
 
-sudo service nginx-sp start && sudo service nginx-sp reload
-	echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
+		sudo service nginx-sp start && sudo service nginx-sp reload
+		echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
 
-	# Add a cron job for auto-ssl renewal
-	if [ "$domainType" == "main" ]; then
-		grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
+		# Add a cron job for auto-ssl renewal
+		if [ "$domainType" == "main" ]; then
+			grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
+		else
+			grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
+		fi
+	elif [[ "$output" == *"Failed authorization procedure."* ]]; then
+		echo -e "\e[31m$domainName isn't being resolved to this server. Please check and update the DNS settings if necessary and try again when domain name points to this server\e[39m"
 	else
-		grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
-	fi
+		echo -e "\e[31mSomething unexpected occurred\e[39m"
+	fi 
 else
 	echo -e "\e[31mTask cannot be identified. It should be either install or uninstall \e[39m"
 fi
