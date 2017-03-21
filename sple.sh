@@ -56,6 +56,11 @@ if [ "$theAction" == "uninstall" ]; then
 	sudo service nginx-sp reload
 	echo -e "\e[31mSSL has been removed. If you are seeing errors on your site, then please fix HTACCESS file and remove the rules that you added to force SSL\e[39m"
 elif [ "$theAction" == "install" ]; then
+	if [ -z "$domainType" ]
+		then
+		echo -e "\e[31mPlease provide the type of the domain (either main or sub)\e[39m"
+		exit
+	fi
 	sudo service nginx-sp stop
 	echo -e "\e[32mChecks passed, press enter to continue\e[39m"
 	if [ "$domainType" == "main" ]; then
@@ -66,7 +71,8 @@ elif [ "$theAction" == "install" ]; then
 		echo -e "\e[31mDomain type not provided. Should be either main or sub\e[39m"
 		exit
 	fi
-	output=$(eval $thecommand 2>&1)
+	output=$(eval $thecommand 2>&1) | xargs
+
 	if [[ "$output" == *"too many requests"* ]]; then
 		echo "Let's Encrypt SSL limit reached. Please wait for a few days before obtaining more SSLs for $domainName"
 	elif [[ "$output" == *"Congratulations"* ]]; then
@@ -98,7 +104,6 @@ elif [ "$theAction" == "install" ]; then
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
 }" > "$spSSLDir$appName-ssl.conf"
 
-		sudo service nginx-sp start && sudo service nginx-sp reload
 		echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
 
 		# Add a cron job for auto-ssl renewal
@@ -109,9 +114,41 @@ elif [ "$theAction" == "install" ]; then
 		fi
 	elif [[ "$output" == *"Failed authorization procedure."* ]]; then
 		echo -e "\e[31m$domainName isn't being resolved to this server. Please check and update the DNS settings if necessary and try again when domain name points to this server\e[39m"
+	elif [[ ! $output ]]; then
+		# If no output, we will assume that a valid SSL already exists for this domain
+		# so we will just add the vhost
+		sudo echo "server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	server_name
+	$domainName
+	www.$domainName
+	;
+
+	ssl on;
+
+	ssl_certificate /etc/letsencrypt/live/$domainName/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/$domainName/privkey.pem;
+
+	root $spAppRoot/public;
+
+	access_log /srv/users/serverpilot/log/$appName/dev_nginx.access.log main;
+	error_log /srv/users/serverpilot/log/$appName/dev_nginx.error.log;
+
+	proxy_set_header Host \$host;
+	proxy_set_header X-Real-IP \$remote_addr;
+	proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-SSL on;
+	proxy_set_header X-Forwarded-Proto \$scheme;
+
+	include /etc/nginx-sp/vhosts.d/$appName.d/*.nonssl_conf;
+	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
+}" > "$spSSLDir$appName-ssl.conf"
+	echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
 	else
 		echo -e "\e[31mSomething unexpected occurred\e[39m"
 	fi 
+	sudo service nginx-sp start && sudo service nginx-sp reload
 else
 	echo -e "\e[31mTask cannot be identified. It should be either install or uninstall \e[39m"
 fi
