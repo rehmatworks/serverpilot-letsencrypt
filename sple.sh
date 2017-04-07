@@ -76,6 +76,8 @@ elif [ "$theAction" == "install" ]; then
 	if [[ "$output" == *"too many requests"* ]]; then
 		echo "Let's Encrypt SSL limit reached. Please wait for a few days before obtaining more SSLs for $domainName"
 	elif [[ "$output" == *"Congratulations"* ]]; then
+	
+	if [ "$domainType" == "main" ]; then
 		sudo echo "server {
 	listen 443 ssl;
 	listen [::]:443 ssl;
@@ -103,6 +105,35 @@ elif [ "$theAction" == "install" ]; then
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.nonssl_conf;
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
 }" > "$spSSLDir$appName-ssl.conf"
+
+	elif [ "$domainType" == "sub" ]; then
+		sudo echo "server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	server_name
+	$domainName
+	;
+
+	ssl on;
+
+	ssl_certificate /etc/letsencrypt/live/$domainName/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/$domainName/privkey.pem;
+
+	root $spAppRoot/public;
+
+	access_log /srv/users/serverpilot/log/$appName/dev_nginx.access.log main;
+	error_log /srv/users/serverpilot/log/$appName/dev_nginx.error.log;
+
+	proxy_set_header Host \$host;
+	proxy_set_header X-Real-IP \$remote_addr;
+	proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-SSL on;
+	proxy_set_header X-Forwarded-Proto \$scheme;
+
+	include /etc/nginx-sp/vhosts.d/$appName.d/*.nonssl_conf;
+	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
+}" > "$spSSLDir$appName-ssl.conf"
+fi
 
 		echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
 
