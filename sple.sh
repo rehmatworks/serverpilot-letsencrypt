@@ -139,9 +139,9 @@ fi
 
 		# Add a cron job for auto-ssl renewal
 		if [ "$domainType" == "main" ]; then
-			grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
+			grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || sudo echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
 		else
-			grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
+			grep "sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName -d www.$domainName && service nginx-sp start && service nginx-sp reload" /etc/crontab || sudo echo "@monthly sudo service nginx-sp stop && yes | letsencrypt certonly -d $domainName && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
 		fi
 	elif [[ "$output" == *"Failed authorization procedure."* ]]; then
 		echo -e "\e[31m$domainName isn't being resolved to this server. Please check and update the DNS settings if necessary and try again when domain name points to this server\e[39m"
