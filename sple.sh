@@ -169,7 +169,6 @@ elif [ "$theAction" == "install" ]; then
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
 }" > "$spSSLDir$appName-ssl.conf"
 	echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
-		grep "sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload" /etc/crontab || sudo echo "@monthly sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
 	else
 		echo -e "\e[31mSomething unexpected occurred\e[39m"
 	fi 
