@@ -138,7 +138,8 @@ elif [ "$theAction" == "install" ]; then
 		echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
 
 		# Add a cron job for auto-ssl renewal
-		grep "sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload" /etc/crontab || sudo echo "@monthly sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload" >> /etc/crontab
+		(crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload && service cron reload\"")| crontab -
+		
 	elif [[ "$output" == *"Failed authorization procedure."* ]]; then
 		echo -e "\e[31m$domainName isn't being resolved to this server. Please check and update the DNS settings if necessary and try again when domain name points to this server\e[39m"
 	elif [[ ! $output ]]; then
