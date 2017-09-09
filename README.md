@@ -13,7 +13,7 @@ If git isn't installed on your system, then install it first by typing this in t
 ```
 and then run this command to clone the reposity and to add the CRON job for auto-renewal of the certs:
 ```bash
-sudo git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv sple.sh /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload && service cron reload\"")| crontab -
+sudo git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv sple.sh /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload\"")| crontab - && service cron reload
 ```
 When you will run the above command, the repo will be cloned to your system and the script will be copied to /usr/local/bin and will be made executable. After that, you can execute it easily.
 
