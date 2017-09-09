@@ -25,6 +25,8 @@ if ! hash letsencrypt 2>/dev/null; then
 	else
 		sudo apt-get install -y letsencrypt  &>/dev/null
 	fi
+	# Add a cron job for auto-ssl renewal
+	(crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload && service cron reload\"")| crontab -
 fi
 
 if [ -z "$theAction" ]
@@ -134,11 +136,7 @@ elif [ "$theAction" == "install" ]; then
 	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
 }" > "$spSSLDir$appName-ssl.conf"
 	fi
-
 		echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
-
-		# Add a cron job for auto-ssl renewal
-		(crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload && service cron reload\"")| crontab -
 		
 	elif [[ "$output" == *"Failed authorization procedure."* ]]; then
 		echo -e "\e[31m$domainName isn't being resolved to this server. Please check and update the DNS settings if necessary and try again when domain name points to this server\e[39m"
