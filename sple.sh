@@ -27,11 +27,6 @@ if ! hash letsencrypt 2>/dev/null; then
 	fi
 fi
 
-# Add a cron job for auto-ssl renewal
-if ! crontab -l | xargs grep -l '@monthly "sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload && service cron reload"'; then
-	(crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload && service cron reload\"")| crontab -
-fi
-
 if [ -z "$theAction" ]
 	then
 	echo -e "\e[31mPlease specify the task. Should be either install or uninstall\e[39m"
