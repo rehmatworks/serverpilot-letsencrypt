@@ -9,18 +9,19 @@ ServerPilot's paid plan costs only $10 per month that unlocks auto installation 
 #### Step 1: Clone the repo
 Run this command to clone the reposity and to add the CRON job for auto-renewal of the certs:
 ```bash
-sudo git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv sple.sh /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload\"")| crontab - && service cron reload
+$ git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv sple.sh /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload\"")| crontab - && service cron reload
 ```
 If git isn't installed on your system and you get error while executing above command, then install it first by typing this in terminal
 ```bash
-  sudo apt-get -y install git
+  $ apt-get -y install git
 ```
 
 Successful execution of the above command will clone the script to your system and the script will be copied to /usr/local/bin and will be made executable as **rwssl**. After that, you can execute it easily by running **rwssl** command.
 
 ## Install SSL
-In the latest version of this script, installation has been made super-simple. You don't need to pass arguments along with the command. Simply run the command **rwssl** and it will ask you for the required information and the SSL will be installed on your system after a few quick steps.
 ```bash
-rwssl
+$ rwssl
 ```
+You will be prompted to provide the required information and your SSL will be installed in matter of a few seconds.
+
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
