@@ -1,6 +1,6 @@
 #!/bin/bash -   
 #title          :rwssl.sh
-#description    :A tiny script to automate the install of Let's Encrypt SSL on ServerPilot servers.
+#description    :A tiny script to automate the installation of Let's Encrypt SSL on ServerPilot servers.
 #author         :Rehmat Alam
 #date           :20171017
 #version        :1.0.1  
