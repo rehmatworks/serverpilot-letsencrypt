@@ -14,7 +14,7 @@ if [[ $EUID -ne 0 ]]
    echo -e "\e[33mYou aren't root. Permission issues may arise.\e[39m"
 fi
 
-printf "What do you want to do? (install/uninstall): " ; read -r theAction
+printf "What do you want to do with Let's Encrypt? (install/uninstall): " ; read -r theAction
 if [ -z "$theAction" ]
 	then
 	echo -e "\e[31mPlease specify the task. Should be either install or uninstall\e[39m"
