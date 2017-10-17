@@ -7,34 +7,18 @@ ServerPilot's paid plan costs only $10 per month that unlocks auto installation 
 ## Getting started
 
 #### Step 1: Clone the repo
-If git isn't installed on your system, then install it first by typing this in terminal
-```bash
-  sudo apt-get -y install git
-```
-and then run this command to clone the reposity and to add the CRON job for auto-renewal of the certs:
+Run this command to clone the reposity and to add the CRON job for auto-renewal of the certs:
 ```bash
 sudo git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv sple.sh /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt renew &>/dev/null && service nginx-sp start && service nginx-sp reload\"")| crontab - && service cron reload
 ```
-When you will run the above command, the repo will be cloned to your system and the script will be copied to /usr/local/bin and will be made executable. After that, you can execute it easily.
+If git isn't installed on your system and you get error while executing above command, then install it first by typing this in terminal
+```bash
+  sudo apt-get -y install git
+```
+
+Successful execution of the above command will clone the script to your system and the script will be copied to /usr/local/bin and will be made executable as **rwssl**. After that, you can execute it easily by running **rwssl** command.
 
 ## Install SSL
-Here are the simple steps to install SSL on your apps
-#### For main domains (Don't include www with your domain)
-```bash
-rwssl install example.com app_name main
-```
-In above example, you can see that I've passed four arguments to rwssl command. The first argument tells the script to install the SSL. Second argument is the domain name. Third argument is the app name of your domain and fourth argument tells either this is a sub domain or the main domain.
+In the latest version of this script, installation has been made super-simple. You don't need to pass arguments along with the command. Simply run the command **rwssl** and it will ask you for the required information and the SSL will be installed on your system after a few quick steps.
 
-### For sub domains
-```bash
-rwssl install sub.example.com app_name sub
-```
-
-## Uninstall SSL
-```bash
-rwssl uninstall example.com app_name
-```
-```bash
-rwssl uninstall sub.example.com app_name
-```
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
