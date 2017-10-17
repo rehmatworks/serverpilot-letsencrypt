@@ -20,5 +20,5 @@ Successful execution of the above command will clone the script to your system a
 
 ## Install SSL
 In the latest version of this script, installation has been made super-simple. You don't need to pass arguments along with the command. Simply run the command **rwssl** and it will ask you for the required information and the SSL will be installed on your system after a few quick steps.
-
+```bash rwssl```
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
