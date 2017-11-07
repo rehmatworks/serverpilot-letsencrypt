@@ -6,7 +6,7 @@ ServerPilot's paid plan costs only $10 per month that unlocks auto installation 
 
 ## Getting started
 
-#### Step 1: Clone the repo
+#### Clone the repo
 Run this command to clone the reposity and to add the CRON job for auto-renewal of the certs:
 ```bash
 $ git apt-get update && clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv sple.sh /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@monthly \"sudo service nginx-sp stop && yes | letsencrypt --standalone renew &>/dev/null && service nginx-sp start && service nginx-sp reload\"")| crontab - && service cron reload
