@@ -14,7 +14,7 @@ $ git apt-get update && clone https://github.com/rehmatworks/serverpilot-letsenc
 
 Successful execution of the above command will clone the script to your system and the script will be copied to /usr/local/bin and will be made executable as **rwssl**. After that, you can execute it easily by running **rwssl** command.
 
-## Install SSL
+### Install SSL
 ```bash
 $ rwssl
 ```
