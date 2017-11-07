@@ -2,8 +2,8 @@
 #title          :rwssl.sh
 #description    :A tiny script to automate the installation of Let's Encrypt SSL on ServerPilot servers.
 #author         :Rehmat Alam
-#date           :20171017
-#version        :1.0.1  
+#date           :20171108
+#version        :2.0.0
 #usage          :./rwssl.sh
 #notes          :       
 #bash_version   :3.2.57(1)-release
@@ -85,15 +85,15 @@ elif [ "$theAction" == "install" ]; then
 	sudo service nginx-sp stop
 	echo -e "\e[32mReady to install, press enter to continue\e[39m"
 	if [ "$domainType" == "main" ]; then
-		thecommand="letsencrypt certonly --register-unsafely-without-email --agree-tos -d $domainName -d www.$domainName"
+		thecommand="letsencrypt certonly  --standalone --register-unsafely-without-email --agree-tos -d $domainName -d www.$domainName"
 	elif [[ "$domainType" == "sub" ]]; then
-		thecommand="letsencrypt certonly --register-unsafely-without-email --agree-tos -d $domainName"
+		thecommand="letsencrypt certonly  --standalone --register-unsafely-without-email --agree-tos -d $domainName"
 	else
 		echo -e "\e[31mDomain type not provided. Should be either main or sub\e[39m"
 		exit
 	fi
 	output=$(eval $thecommand 2>&1) | xargs
-
+	
 	if [[ "$output" == *"too many requests"* ]]; then
 		echo "Let's Encrypt SSL limit reached. Please wait for a few days before obtaining more SSLs for $domainName"
 	elif [[ "$output" == *"Congratulations"* ]]; then
@@ -160,36 +160,40 @@ elif [ "$theAction" == "install" ]; then
 	elif [[ "$output" == *"Failed authorization procedure."* ]]; then
 		echo -e "\e[31m$domainName isn't being resolved to this server. Please check and update the DNS settings if necessary and try again when domain name points to this server\e[39m"
 	elif [[ ! $output ]]; then
-		# If no output, we will assume that a valid SSL already exists for this domain
-		# so we will just add the vhost
-		sudo echo "server {
-	listen 443 ssl;
-	listen [::]:443 ssl;
-	server_name
-	$domainName
-	www.$domainName
-	;
+		# If no output, we will check if SSL is already issued and if so
+		# we will just add the vhost
+		if [ -f "/etc/letsencrypt/live/$domainName/fullchain.pem" ] && [ -f "/etc/letsencrypt/live/$domainName/privkey.pem" ]; then
+			sudo echo "server {
+		listen 443 ssl;
+		listen [::]:443 ssl;
+		server_name
+		$domainName
+		www.$domainName
+		;
 
-	ssl on;
+		ssl on;
 
-	ssl_certificate /etc/letsencrypt/live/$domainName/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/$domainName/privkey.pem;
+		ssl_certificate /etc/letsencrypt/live/$domainName/fullchain.pem;
+		ssl_certificate_key /etc/letsencrypt/live/$domainName/privkey.pem;
 
-	root $spAppRoot/public;
+		root $spAppRoot/public;
 
-	access_log /srv/users/serverpilot/log/$appName/dev_nginx.access.log main;
-	error_log /srv/users/serverpilot/log/$appName/dev_nginx.error.log;
+		access_log /srv/users/serverpilot/log/$appName/dev_nginx.access.log main;
+		error_log /srv/users/serverpilot/log/$appName/dev_nginx.error.log;
 
-	proxy_set_header Host \$host;
-	proxy_set_header X-Real-IP \$remote_addr;
-	proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-	proxy_set_header X-Forwarded-SSL on;
-	proxy_set_header X-Forwarded-Proto \$scheme;
+		proxy_set_header Host \$host;
+		proxy_set_header X-Real-IP \$remote_addr;
+		proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-SSL on;
+		proxy_set_header X-Forwarded-Proto \$scheme;
 
-	include /etc/nginx-sp/vhosts.d/$appName.d/*.nonssl_conf;
-	include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
-}" > "$spSSLDir$appName-ssl.conf"
-	echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
+		include /etc/nginx-sp/vhosts.d/$appName.d/*.nonssl_conf;
+		include /etc/nginx-sp/vhosts.d/$appName.d/*.conf;
+	}" > "$spSSLDir$appName-ssl.conf"
+		echo -e "\e[32mSSL should have been installed for $domainName with auto-renewal (via cron)\e[39m"
+		else
+			echo -e "\e[31mSSL cannot be obtained at the moment. Please try again.\e[39m"
+		fi
 	else
 		echo -e "\e[31mSomething unexpected occurred\e[39m"
 	fi 
