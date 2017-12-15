@@ -100,8 +100,8 @@ elif [ "$theAction" == "install" ]; then
 	
 	if [ "$domainType" == "main" ]; then
 		sudo echo "server {
-	listen 443 ssl;
-	listen [::]:443 ssl;
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
 	server_name
 	$domainName
 	www.$domainName
@@ -129,8 +129,8 @@ elif [ "$theAction" == "install" ]; then
 
 	elif [ "$domainType" == "sub" ]; then
 		sudo echo "server {
-	listen 443 ssl;
-	listen [::]:443 ssl;
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
 	server_name
 	$domainName
 	;
@@ -164,8 +164,8 @@ elif [ "$theAction" == "install" ]; then
 		# we will just add the vhost
 		if [ -f "/etc/letsencrypt/live/$domainName/fullchain.pem" ] && [ -f "/etc/letsencrypt/live/$domainName/privkey.pem" ]; then
 			sudo echo "server {
-		listen 443 ssl;
-		listen [::]:443 ssl;
+		listen 443 ssl http2;
+		listen [::]:443 ssl http2;
 		server_name
 		$domainName
 		www.$domainName
