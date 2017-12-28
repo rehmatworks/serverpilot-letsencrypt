@@ -21,3 +21,13 @@ $ rwssl
 You will be prompted to provide the required information and your SSL will be installed in matter of a few seconds.
 
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
+
+## How to Uninstall
+First of all, uninstall the SSL from each domain by choosing ```uninstall``` option after executing ```rwssl``` command. This step is optional and this removes the added vhosts. If you don't want to remove the vhosts and only want to remove the script, then ignore this step.
+
+Next, execute this command in your terminal to delete the script:
+```bash
+sudo rm /usr/local/bin/rwssl
+```
+
+Lastly, edit the crontab by running `crontab -e` command delete the added CRON jobs responsible for SSL auto-renewals.
