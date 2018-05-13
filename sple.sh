@@ -49,10 +49,10 @@ spSSLDir="/etc/nginx-sp/vhosts.d/"
 if ! hash certbot 2>/dev/null; then
 	echo -e "\e[33mLet's Encrypt libs not found. Installing the libraries....\e[39m"
 	sudo apt-get update &>/dev/null &&
-		sudo apt-get install software-properties-common &>/dev/null &&
-		sudo add-apt-repository ppa:certbot/certbot &>/dev/null &&
-		sudo apt-get update &>/dev/null &&
-		sudo apt-get install certbot &>/dev/null
+		yes | sudo apt-get install software-properties-common &>/dev/null &&
+		yes | sudo add-apt-repository ppa:certbot/certbot &>/dev/null &&
+		yes | sudo apt-get update &>/dev/null &&
+		yes | sudo apt-get install certbot &>/dev/null
 fi
 
 if [ ! -d "$spAppRoot" ]
