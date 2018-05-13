@@ -36,8 +36,9 @@ def apps():
 	spapps = []
 	if os.path.isdir(vhostsdir):
 		for file in os.listdir(vhostsdir):
-			if file.endswith(".conf"):
+			if file.endswith("conf"):
 				conf_file = os.path.join(vhostsdir, file)
+				print(conf_file)
 				c = nginx.loadf(conf_file).as_dict
 				def search(value):
 					data = c.get('conf')
@@ -142,7 +143,6 @@ def get_ssl(app):
 
 if args.all is True:
 	apps = apps()
-	print(apps)
 	# for app in apps:
 	# 	# install = get_ssl(app)
 	# 	# if(install):
