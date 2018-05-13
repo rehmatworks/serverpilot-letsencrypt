@@ -67,7 +67,7 @@ def certbot_command(root, domains):
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
-	cmd = "cmd /c certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos"+domainsstr+ " 2>&1"
+	cmd = "cmd certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos"+domainsstr+ " 2>&1"
 	return cmd
 
 def write_conf(app):
@@ -110,7 +110,7 @@ def write_conf(app):
 		return False
 
 def install_certbot():
-	return 'cmd /c sudo apt-get update &>/dev/null && yes | sudo apt-get install software-properties-common &>/dev/null && yes | sudo add-apt-repository ppa:certbot/certbot &>/dev/null && yes | sudo apt-get update &>/dev/null && yes | sudo apt-get install certbot &>/dev/null'
+	return 'cmd sudo apt-get update &>/dev/null && yes | sudo apt-get install software-properties-common &>/dev/null && yes | sudo add-apt-repository ppa:certbot/certbot &>/dev/null && yes | sudo apt-get update &>/dev/null && yes | sudo apt-get install certbot &>/dev/null'
 
 def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
