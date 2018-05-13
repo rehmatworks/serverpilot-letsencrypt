@@ -166,7 +166,7 @@ elif args.appname:
 			write_conf(app)
 	else:
 		print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
-elif args.ignoreapps is True:
+elif args.ignoreapps:
 	apps = apps()
 	for app in apps:
 		ignoreapps = args.ignoreapps.split(',')
