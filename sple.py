@@ -42,7 +42,7 @@ def search(value, data):
 
 def apps():
 	spapps = []
-	print(bcolors.WARNING+'Finding apps for serverpilot user.'+bcolors.ENDC)
+	print(bcolors.HEADER+'Finding apps for serverpilot user.'+bcolors.ENDC)
 	if os.path.isdir(vhostsdir):
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
 			if '-ssl.conf' not in conf_file:
