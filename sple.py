@@ -34,7 +34,6 @@ def find_between(s, first, last):
 def search(value, data):
 	for conf in data:
 		blocks = conf.get('server')
-		print(blocks)
 		for block in blocks:
 			found = block.get(value)
 			if found:
@@ -47,12 +46,11 @@ def apps():
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
 			if '-ssl.conf' not in conf_file:
 				c = nginx.loadf(conf_file).as_dict
-				data = c.get('conf')
+				data = c.get('conf')[-1:]
 				try:
 					domains = search('server_name', data).split() # All app domains
 				except:
 					domains = None
-				print(domains)
 				try:
 					root = search('root', data)
 				except:
