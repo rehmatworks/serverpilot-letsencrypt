@@ -6,7 +6,7 @@ Automate the installation of Let's Encrypt SSL on the free plan of ServerPilot
 
 #### Install or update `rwssl` on your server
 ```bash
-git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv rwssl /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@daily \"certbot renew &>/dev/null && service nginx-sp reload\"")| crontab - && service cron reload
+git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv rwssl /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@daily \"rwssl -r &>/dev/null && service nginx-sp reload\"")| crontab - && service cron reload
 ```
 If all goes fine, a new command `rwssl` will become available.
 
@@ -34,6 +34,16 @@ rwssl --ignore 'app1,app2,app3'
 rwssl -n app_name
 ```
 
+### Renew SSLS
+```bash
+rwssl -r
+```
+or
+
+```bash
+rwssl --renew
+```
+
 To get help on commands, type `rwssl -h` or `rwssl --help`
 
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
@@ -43,5 +53,4 @@ To unintall `rwssl`, simply delete the script:
 ```bash
 sudo rm /usr/local/bin/rwssl
 ```
-
 Lastly, edit the crontab by running `crontab -e` command and delete the added CRON jobs responsible for SSL auto-renewals.

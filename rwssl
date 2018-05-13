@@ -9,6 +9,7 @@ ap = argparse.ArgumentParser(description='A Python script that automates the SSL
 ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
 ap.add_argument('-i', '--ignore', dest='ignoreapps', help='Comma-seperated app names to ignore some apps and install SSL for all others.', default=False)
 ap.add_argument('-n', '--name', dest='appname', help='Name of the app where SSL should be installed.', default=False)
+ap.add_argument('-r', '--renew', dest='renew', help='Renew all installed SSL certificates which are about to expire.', action='store_const', const=True, default=False)
 
 args = ap.parse_args()
 vhostsdir = '/etc/nginx-sp/vhosts.d/' # ServerPilot vhosts directory
@@ -124,6 +125,11 @@ def get_app_info(conf_file):
 			domaininfo = {'domains': domains, 'root': root, 'appname': appname}
 	return domaininfo
 
+def renew_ssls():
+	cmd = 'certbot renew'
+	commands.getstatusoutput(cmd)
+	print(bcolors.OKBLUE+'Renewals should have been succeeded for all expiring SSLs.'+bcolors.ENDC)
+
 def get_ssl(app):
 	print(bcolors.OKBLUE+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
 	checkcertbot = commands.getstatusoutput('certbot')
@@ -175,5 +181,7 @@ elif args.ignoreapps:
 			install = get_ssl(app)
 			if(install):
 				write_conf(app)
+if args.renew is True:
+	renew_ssls()
 else:
 	print(bcolors.OKBLUE+'No or incorrect arguments supplied. Type '+bcolors.BOLD+'rwssl -h'+bcolors.ENDC+bcolors.OKBLUE+' to get help.'+bcolors.ENDC)
