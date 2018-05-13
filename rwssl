@@ -169,7 +169,7 @@ elif args.appname:
 elif args.ignoreapps is True:
 	apps = apps()
 	for app in apps:
-		ignoreapps = args.except.split(',')
+		ignoreapps = args.ignoreapps.split(',')
 		if app not in ignoreapps:
 			install = get_ssl(app)
 			if(install):
