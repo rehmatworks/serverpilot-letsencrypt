@@ -42,6 +42,7 @@ fi
 printf "Is this a main domain or sub-domain? (main/sub): " ; read -r domainType
 
 spAppRoot="/srv/users/serverpilot/apps/$appName"
+spAppPublicRoot="$spAppRoot/public"
 spSSLDir="/etc/nginx-sp/vhosts.d/"
 
 # Install Let's Encrypt libraries if not found
@@ -76,12 +77,11 @@ elif [ "$theAction" == "install" ]; then
 			exit
 		fi
 	fi
-	sudo service nginx-sp stop
 	echo -e "\e[32mReady to install, press enter to continue\e[39m"
 	if [ "$domainType" == "main" ]; then
-		thecommand="letsencrypt certonly  --standalone --register-unsafely-without-email --agree-tos -d $domainName -d www.$domainName"
+		thecommand="certbot certonly --webroot -w $spAppPublicRoot --register-unsafely-without-email --agree-tos -d $domainName -d www.$domainName"
 	elif [[ "$domainType" == "sub" ]]; then
-		thecommand="letsencrypt certonly  --standalone --register-unsafely-without-email --agree-tos -d $domainName"
+		thecommand="certbot certonly --webroot -w $spAppPublicRoot --register-unsafely-without-email --agree-tos -d $domainName"
 	else
 		echo -e "\e[31mDomain type not provided. Should be either main or sub\e[39m"
 		exit
@@ -134,7 +134,7 @@ elif [ "$theAction" == "install" ]; then
 	ssl_certificate /etc/letsencrypt/live/$domainName/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/$domainName/privkey.pem;
 
-	root $spAppRoot/public;
+	root $spAppPublicRoot;
 
 	access_log /srv/users/serverpilot/log/$appName/dev_nginx.access.log main;
 	error_log /srv/users/serverpilot/log/$appName/dev_nginx.error.log;
@@ -170,7 +170,7 @@ elif [ "$theAction" == "install" ]; then
 		ssl_certificate /etc/letsencrypt/live/$domainName/fullchain.pem;
 		ssl_certificate_key /etc/letsencrypt/live/$domainName/privkey.pem;
 
-		root $spAppRoot/public;
+		root $spAppPublicRoot;
 
 		access_log /srv/users/serverpilot/log/$appName/dev_nginx.access.log main;
 		error_log /srv/users/serverpilot/log/$appName/dev_nginx.error.log;
@@ -191,7 +191,7 @@ elif [ "$theAction" == "install" ]; then
 	else
 		echo -e "\e[31mSomething unexpected occurred\e[39m"
 	fi 
-	sudo service nginx-sp start && sudo service nginx-sp reload
+	sudo service nginx-sp reload
 else
 	echo -e "\e[31mTask cannot be identified. It should be either install or uninstall \e[39m"
 fi
