@@ -46,7 +46,7 @@ def apps():
 			if '-ssl.conf' not in conf_file:
 				appinfo = get_app_info(conf_file)
 				if(appinfo):
-					sapps.append(appinfo)
+					spapps.append(appinfo)
 	if(len(spapps) > 0):
 		print(bcolors.OKBLUE+str(len(spapps))+' apps found! Proceeding further...'+bcolors.ENDC)
 	else:
