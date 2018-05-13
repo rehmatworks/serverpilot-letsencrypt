@@ -116,6 +116,8 @@ def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
+		print(cmd)
+		exit()
 		cboutput = os.popen(cmd).read()
 		if 'Congratulations' in cboutput:
 			print(bcolors.OKGREEN+'SSL has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
@@ -138,8 +140,6 @@ def get_ssl(app):
 	return False
 if args.all is True:
 	apps = apps()
-	print(apps)
-	exit
 	for app in apps:
 		install = get_ssl(app)
 		if(install):
