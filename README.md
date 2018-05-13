@@ -4,7 +4,7 @@ Automate the installation of Let's Encrypt SSL on the free plan of ServerPilot
 
 ## Getting started
 
-#### Install or Update
+#### Install or update `rwssl` on your server
 ```bash
 git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv rwssl /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@daily \"certbot renew &>/dev/null && service nginx-sp reload\"")| crontab - && service cron reload
 ```
@@ -21,7 +21,15 @@ or
 rwssl --all
 ```
 
-2. Install SSL on a specific app
+2. Install SSL on all apps except some (Provide comma-separated app names)
+```bash
+rwssl -i 'app1,app2,app3'
+```
+or
+```bash
+rwssl --ignore 'app1,app2,app3'
+```
+3. Install SSL on a specific app
 ```bash
 rwssl -n app_name
 ```
