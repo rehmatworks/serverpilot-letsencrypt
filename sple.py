@@ -12,7 +12,7 @@ ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available a
 ap.add_argument('-n', '--name', dest='appname', help='Name of the app.', default=False)
 
 args = ap.parse_args()
-vhostsdir = 'test' # ServerPilot vhosts directory
+vhostsdir = '/etc/nginx-sp/vhosts.d/' # ServerPilot vhosts directory
 class bcolors:
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'
