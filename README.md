@@ -34,7 +34,7 @@ rwssl --ignore 'app1,app2,app3'
 rwssl -n app_name
 ```
 
-### Renew SSLS
+### Renew SSLs
 ```bash
 rwssl -r
 ```
