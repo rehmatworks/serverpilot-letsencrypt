@@ -7,6 +7,7 @@ import commands
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot free plan.')
 ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
+ap.add_argument('-e', '--except', dest='except', help='Comma-seperated app names to ignore some apps and install SSL for all others.', action='store_const', const=True, default=False)
 ap.add_argument('-n', '--name', dest='appname', help='Name of the app where SSL should be installed.', default=False)
 
 args = ap.parse_args()
@@ -156,15 +157,22 @@ if args.all is True:
 		install = get_ssl(app)
 		if(install):
 			write_conf(app)
-else:
-	if args.appname:
-		vhostfile = vhostsdir+args.appname+'.conf'
-		app = get_app_info(vhostfile)
-		if app is not False:
+elif args.appname:
+	vhostfile = vhostsdir+args.appname+'.conf'
+	app = get_app_info(vhostfile)
+	if app is not False:
+		install = get_ssl(app)
+		if(install):
+			write_conf(app)
+	else:
+		print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
+elif args.except is True:
+	apps = apps()
+	for app in apps:
+		ignoreapps = args.except.split(',')
+		if app not in ignoreapps:
 			install = get_ssl(app)
 			if(install):
 				write_conf(app)
-		else:
-			print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
-	else:
-		print(bcolors.OKBLUE+'No or incorrect arguments supplied. Type '+bcolors.BOLD+'rwssl -h'+bcolors.ENDC+bcolors.OKBLUE+' to get help.'+bcolors.ENDC)
+else:
+	print(bcolors.OKBLUE+'No or incorrect arguments supplied. Type '+bcolors.BOLD+'rwssl -h'+bcolors.ENDC+bcolors.OKBLUE+' to get help.'+bcolors.ENDC)
