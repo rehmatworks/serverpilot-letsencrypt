@@ -31,27 +31,28 @@ def find_between(s, first, last):
 	except ValueError:
 		return None
 
+def search(value, data):
+	for conf in data:
+		blocks = conf.get('server')
+		for block in blocks:
+			found = block.get(value)
+			if found:
+				return found
+	return None
+
 def apps():
 	spapps = []
 	if os.path.isdir(vhostsdir):
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
 			if '-ssl.conf' not in conf_file:
 				c = nginx.loadf(conf_file).as_dict
-				def search(value):
-					data = c.get('conf')
-					for conf in data:
-						blocks = conf.get('server')
-						for block in blocks:
-							found = block.get(value)
-							if found:
-								return found
-					return None
+				data = c.get('conf')
 				try:
-					domains = search('server_name').split() # All app domains
+					domains = search('server_name', data).split() # All app domains
 				except:
 					domains = None
 				try:
-					root = search('root')
+					root = search('root', data)
 				except:
 					root = None
 				try:
