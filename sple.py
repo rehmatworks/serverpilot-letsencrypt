@@ -126,6 +126,7 @@ def get_ssl(app):
 		print(bcolors.OKBLUE+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
 		certbotcmd = install_certbot();
 		commands.getstatusoutput(certbotcmd)
+		print(bcolors.OKGREEN+'Finished installing required libraries.'+bcolors.ENDC)
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
