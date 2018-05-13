@@ -68,7 +68,7 @@ def certbot_command(root, domains):
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
-	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos"+domainsstr+ " 2>&1"
+	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos"+domainsstr
 	return cmd
 
 def write_conf(app):
@@ -103,7 +103,7 @@ def write_conf(app):
 		nginx.dumpf(c, confname)
 		print(bcolors.OKGREEN+'Virtual host file created!'+bcolors.ENDC)
 		print(bcolors.OKBLUE+'Reloading NGINX server...'+bcolors.ENDC)
-		os.system('sudo service nginx-sp reload  &>/dev/null')
+		os.system('sudo service nginx-sp reload')
 		print(bcolors.OKGREEN+'SSL should have been installed and activated for the app'+bcolors.BOLD+app.get('appname')+bcolors.ENDC)
 		return True
 	except:
@@ -111,7 +111,7 @@ def write_conf(app):
 		return False
 
 def install_certbot():
-	return 'sudo apt-get update &>/dev/null && yes | sudo apt-get install software-properties-common &>/dev/null && yes | sudo add-apt-repository ppa:certbot/certbot &>/dev/null && yes | sudo apt-get update &>/dev/null && yes | sudo apt-get install certbot &>/dev/null'
+	return 'sudo apt-get update && yes | sudo apt-get install software-properties-common && yes | sudo add-apt-repository ppa:certbot/certbot && yes | sudo apt-get update && yes | sudo apt-get install certbot'
 
 def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
