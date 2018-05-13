@@ -36,6 +36,7 @@ def apps():
 	if os.path.isdir(vhostsdir):
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
 			c = nginx.loadf(conf_file).as_dict
+			print(c)
 			def search(value):
 				data = c.get('conf')
 				for conf in data:
