@@ -3,6 +3,7 @@
 import glob, os
 import nginx
 import argparse
+import subprocess
 
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on ServerPilot free servers.')
@@ -67,7 +68,7 @@ def certbot_command(root, domains):
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
-	cmd = "cmd certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos"+domainsstr+ " 2>&1"
+	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos"+domainsstr+ " 2>&1"
 	return cmd
 
 def write_conf(app):
@@ -110,7 +111,7 @@ def write_conf(app):
 		return False
 
 def install_certbot():
-	return 'cmd sudo apt-get update &>/dev/null && yes | sudo apt-get install software-properties-common &>/dev/null && yes | sudo add-apt-repository ppa:certbot/certbot &>/dev/null && yes | sudo apt-get update &>/dev/null && yes | sudo apt-get install certbot &>/dev/null'
+	return 'sudo apt-get update &>/dev/null && yes | sudo apt-get install software-properties-common &>/dev/null && yes | sudo add-apt-repository ppa:certbot/certbot &>/dev/null && yes | sudo apt-get update &>/dev/null && yes | sudo apt-get install certbot &>/dev/null'
 
 def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
@@ -136,23 +137,26 @@ def get_ssl(app):
 		print(bcolors.FAIL+'Provided path of the app seems to be invalid.'+bcolors.ENDC)
 		exit
 	return False
-if args.all is True:
-	apps = apps()
-	for app in apps:
-		install = get_ssl(app)
-		if(install):
-			write_conf(app)
-else:
-	if args.appname and args.domain and args.root:
-		app = {'appname': args.appname, 'domains': [args.domain], 'root': args.root}
-		install = get_ssl(app)
-		if(install):
-			write_conf(app)
 
-	else:
-		if args.appname is False or args.appname is None:
-			print(bcolors.FAIL+'App name cannot be blank.'+bcolors.ENDC)
-		if args.domain is False or args.domain is None:
-			print(bcolors.FAIL+'Domain name cannot be blank.'+bcolors.ENDC)
-		if args.root is False or args.root is None:
-			print(bcolors.FAIL+'Root directory of the app cannot be blank.'+bcolors.ENDC)
+cmd = 'ls -a'
+subprocess.call(cmd)
+# if args.all is True:
+# 	apps = apps()
+# 	for app in apps:
+# 		install = get_ssl(app)
+# 		if(install):
+# 			write_conf(app)
+# else:
+# 	if args.appname and args.domain and args.root:
+# 		app = {'appname': args.appname, 'domains': [args.domain], 'root': args.root}
+# 		install = get_ssl(app)
+# 		if(install):
+# 			write_conf(app)
+
+# 	else:
+# 		if args.appname is False or args.appname is None:
+# 			print(bcolors.FAIL+'App name cannot be blank.'+bcolors.ENDC)
+# 		if args.domain is False or args.domain is None:
+# 			print(bcolors.FAIL+'Domain name cannot be blank.'+bcolors.ENDC)
+# 		if args.root is False or args.root is None:
+# 			print(bcolors.FAIL+'Root directory of the app cannot be blank.'+bcolors.ENDC)
