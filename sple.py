@@ -7,7 +7,7 @@ import commands
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on ServerPilot free servers.')
 ap.add_argument('-d', '--domain', dest='domain', help='Domain name of the app', default=False)
-ap.add_argument('-r', '--root', dest='root', help='Root directory of the app excluding public', default=False)
+ap.add_argument('-r', '--root', dest='root', help='Root directory of the app including public', default=False)
 ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
 ap.add_argument('-n', '--name', dest='appname', help='Name of the app.', default=False)
 
@@ -128,7 +128,7 @@ def get_ssl(app):
 			print(bcolors.OKGREEN+'SSL has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
 			return True
 		elif 'Failed authorization procedure' in cboutput:
-			print(bcolors.FAIL+'DNS check failed. Please ensure that the domains '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server.'+bcolors.ENDC)
+			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server as well as you have provided the correct root path of your app (including public).'+bcolors.ENDC)
 		elif 'too many requests' in cboutput:
 			print(bcolors.WARNING+'SSL limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
 		elif 'command not found' in cboutput:
