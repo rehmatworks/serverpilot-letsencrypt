@@ -4,7 +4,6 @@ import glob, os
 import nginx
 import argparse
 import commands
-
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on ServerPilot free servers.')
 ap.add_argument('-d', '--domain', dest='domain', help='Domain name of the app', default=False)
@@ -35,35 +34,32 @@ def find_between(s, first, last):
 def apps():
 	spapps = []
 	if os.path.isdir(vhostsdir):
-		for file in os.listdir(vhostsdir):
-			if file.endswith("conf"):
-				conf_file = os.path.join(vhostsdir, file)
-				print(conf_file)
-				c = nginx.loadf(conf_file).as_dict
-				def search(value):
-					data = c.get('conf')
-					for conf in data:
-						blocks = conf.get('server')
-						for block in blocks:
-							found = block.get(value)
-							if found:
-								return found
-					return None
-				try:
-					domains = search('server_name').split() # All app domains
-				except:
-					domains = None
-				try:
-					root = search('root')
-				except:
-					root = None
-				try:
-					appname = find_between(root, 'apps/', '/')
-				except:
-					appname = None
-				if(appname and domains and root):
-					domaininfo = {'domains': domains, 'root': root, 'appname': appname}
-					spapps.append(domaininfo)
+		for conf_file in glob.glob(vhostsdir+'/*.conf'):
+			c = nginx.loadf(conf_file).as_dict
+			def search(value):
+				data = c.get('conf')
+				for conf in data:
+					blocks = conf.get('server')
+					for block in blocks:
+						found = block.get(value)
+						if found:
+							return found
+				return None
+			try:
+				domains = search('server_name').split() # All app domains
+			except:
+				domains = None
+			try:
+				root = search('root')
+			except:
+				root = None
+			try:
+				appname = find_between(root, 'apps/', '/')
+			except:
+				appname = None
+			if(appname and domains and root):
+				domaininfo = {'domains': domains, 'root': root, 'appname': appname}
+				spapps.append(domaininfo)
 	return spapps
 
 def certbot_command(root, domains):
