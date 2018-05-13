@@ -117,7 +117,7 @@ def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
-		cboutput = commands.getstatusoutput(cmd)[1]
+		cboutput = commands.getstatusoutput('ls')[1]
 		print(cboutput)
 		return False
 		if 'Congratulations' in cboutput:
