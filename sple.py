@@ -35,32 +35,32 @@ def apps():
 	spapps = []
 	if os.path.isdir(vhostsdir):
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
-			c = nginx.loadf(conf_file).as_dict
-			print(c)
-			def search(value):
-				data = c.get('conf')
-				for conf in data:
-					blocks = conf.get('server')
-					for block in blocks:
-						found = block.get(value)
-						if found:
-							return found
-				return None
-			try:
-				domains = search('server_name').split() # All app domains
-			except:
-				domains = None
-			try:
-				root = search('root')
-			except:
-				root = None
-			try:
-				appname = find_between(root, 'apps/', '/')
-			except:
-				appname = None
-			if(appname and domains and root):
-				domaininfo = {'domains': domains, 'root': root, 'appname': appname}
-				spapps.append(domaininfo)
+			if '-ssl.conf' not in conf_file:
+				c = nginx.loadf(conf_file).as_dict
+				def search(value):
+					data = c.get('conf')
+					for conf in data:
+						blocks = conf.get('server')
+						for block in blocks:
+							found = block.get(value)
+							if found:
+								return found
+					return None
+				try:
+					domains = search('server_name').split() # All app domains
+				except:
+					domains = None
+				try:
+					root = search('root')
+				except:
+					root = None
+				try:
+					appname = find_between(root, 'apps/', '/')
+				except:
+					appname = None
+				if(appname and domains and root):
+					domaininfo = {'domains': domains, 'root': root, 'appname': appname}
+					spapps.append(domaininfo)
 	return spapps
 
 def certbot_command(root, domains):
