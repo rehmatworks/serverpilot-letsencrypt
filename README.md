@@ -6,7 +6,7 @@ Automate the installation of Let's Encrypt SSL on the free plan of ServerPilot
 
 #### Install or update `rwssl` on your server
 ```bash
-git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv rwssl /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl && (crontab -l ; echo "@daily \"rwssl -r &>/dev/null && service nginx-sp reload\"")| crontab - && service cron reload
+git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv rwssl /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl
 ```
 If all goes fine, a new command `rwssl` will become available.
 
@@ -42,6 +42,16 @@ or
 
 ```bash
 rwssl --renew
+```
+
+### Install CRON Job for SSL Renewals
+```bash
+rwssl -ic
+```
+or
+
+```bash
+rwssl --installcron
 ```
 
 To get help on commands, type `rwssl -h` or `rwssl --help`

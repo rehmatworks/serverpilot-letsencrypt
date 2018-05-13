@@ -10,6 +10,7 @@ ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available a
 ap.add_argument('-i', '--ignore', dest='ignoreapps', help='Comma-seperated app names to ignore some apps and install SSL for all others.', default=False)
 ap.add_argument('-n', '--name', dest='appname', help='Name of the app where SSL should be installed.', default=False)
 ap.add_argument('-r', '--renew', dest='renew', help='Renew all installed SSL certificates which are about to expire.', action='store_const', const=True, default=False)
+ap.add_argument('-ic', '--installcron', dest='installcron', help='Install the cron job for SSL renewals.', action='store_const', const=True, default=False)
 
 args = ap.parse_args()
 vhostsdir = '/etc/nginx-sp/vhosts.d/' # ServerPilot vhosts directory
@@ -125,6 +126,18 @@ def get_app_info(conf_file):
 			domaininfo = {'domains': domains, 'root': root, 'appname': appname}
 	return domaininfo
 
+def install_sp_cron():
+	cronfile = '/etc/cron.d/certbot'
+	if(os.path.exists(cronfile)):
+		print(bcolors.OKBLUE+'CRON job is already added properly and renewals should work.'+bcolors.ENDC)
+	else:
+		try:
+			with open(cronfile, 'w') as f:
+				f.write("SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\n0 */12 * * * root test -x /usr/bin/certbot -a \! -d /run/systemd/system && perl -e 'sleep int(rand(3600))' && certbot -q renew")
+		print(bcolors.OKGREEN+'Cron job has been successfully installed for SSL renewals.'+bcolors.ENDC)
+		except:
+			print(bcolors.FAIL+'CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
+
 def renew_ssls():
 	cmd = 'certbot renew'
 	commands.getstatusoutput(cmd)
@@ -181,7 +194,9 @@ elif args.ignoreapps:
 			install = get_ssl(app)
 			if(install):
 				write_conf(app)
-if args.renew is True:
+elif args.renew is True:
 	renew_ssls()
+elif args.installcron is True:
+	install_sp_cron()
 else:
 	ap.print_help()
