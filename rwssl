@@ -6,10 +6,8 @@ import argparse
 import commands
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot free plan.')
-ap.add_argument('-d', '--domain', dest='domain', help='Domain name of the app', default=False)
-ap.add_argument('-r', '--root', dest='root', help='Root directory of the app including public', default=False)
 ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
-ap.add_argument('-n', '--name', dest='appname', help='Name of the app.', default=False)
+ap.add_argument('-n', '--name', dest='appname', help='Name of the app where SSL should be installed.', default=False)
 
 args = ap.parse_args()
 vhostsdir = '/etc/nginx-sp/vhosts.d/' # ServerPilot vhosts directory
@@ -46,23 +44,9 @@ def apps():
 	if os.path.isdir(vhostsdir):
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
 			if '-ssl.conf' not in conf_file:
-				c = nginx.loadf(conf_file).as_dict
-				data = c.get('conf')[-1:]
-				try:
-					domains = search('server_name', data).split() # All app domains
-				except:
-					domains = None
-				try:
-					root = search('root', data)
-				except:
-					root = None
-				try:
-					appname = find_between(root, 'apps/', '/')
-				except:
-					appname = None
-				if(appname and domains and root):
-					domaininfo = {'domains': domains, 'root': root, 'appname': appname}
-					spapps.append(domaininfo)
+				appinfo = get_app_info(conf_file)
+				if(appinfo):
+					sapps.append(appinfo)
 	if(len(spapps) > 0):
 		print(bcolors.OKBLUE+str(len(spapps))+' apps found! Proceeding further...'+bcolors.ENDC)
 	else:
@@ -118,6 +102,27 @@ def write_conf(app):
 def install_certbot():
 	return 'sudo apt-get update && yes | sudo apt-get install software-properties-common && yes | sudo add-apt-repository ppa:certbot/certbot && yes | sudo apt-get update && yes | sudo apt-get install certbot'
 
+def get_app_info(conf_file):
+	domaininfo = False
+	if os.path.exists(conf_file):
+		c = nginx.loadf(conf_file).as_dict
+		data = c.get('conf')[-1:]
+		try:
+			domains = search('server_name', data).split() # All app domains
+		except:
+			domains = None
+		try:
+			root = search('root', data)
+		except:
+			root = None
+		try:
+			appname = find_between(root, 'apps/', '/')
+		except:
+			appname = None
+		if(appname and domains and root):
+			domaininfo = {'domains': domains, 'root': root, 'appname': appname}
+	return domaininfo
+
 def get_ssl(app):
 	print(bcolors.OKBLUE+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
 	checkcertbot = commands.getstatusoutput('certbot')
@@ -152,10 +157,14 @@ if args.all is True:
 		if(install):
 			write_conf(app)
 else:
-	if args.appname and args.domain and args.root:
-		app = {'appname': args.appname, 'domains': [args.domain], 'root': args.root}
-		install = get_ssl(app)
-		if(install):
-			write_conf(app)
+	if args.appname:
+		vhostfile = vhostsdir+args.appname+'.conf'
+		app = get_app_info(vhostfile)
+		if app is not False:
+			install = get_ssl(app)
+			if(install):
+				write_conf(app)
+		else:
+			print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
 	else:
 		print(bcolors.OKBLUE+'No or incorrect arguments supplied. Type '+bcolors.BOLD+'rwssl -h'+bcolors.ENDC+bcolors.OKBLUE+' to get help.'+bcolors.ENDC)
