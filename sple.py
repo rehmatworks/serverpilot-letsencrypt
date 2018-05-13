@@ -5,7 +5,7 @@ import nginx
 import argparse
 import commands
 # Argument parsing
-ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on ServerPilot free servers.')
+ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot free plan.')
 ap.add_argument('-d', '--domain', dest='domain', help='Domain name of the app', default=False)
 ap.add_argument('-r', '--root', dest='root', help='Root directory of the app including public', default=False)
 ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
@@ -157,11 +157,5 @@ else:
 		install = get_ssl(app)
 		if(install):
 			write_conf(app)
-
 	else:
-		if args.appname is False or args.appname is None:
-			print(bcolors.FAIL+'App name cannot be blank.'+bcolors.ENDC)
-		if args.domain is False or args.domain is None:
-			print(bcolors.FAIL+'Domain name cannot be blank.'+bcolors.ENDC)
-		if args.root is False or args.root is None:
-			print(bcolors.FAIL+'Root directory of the app cannot be blank.'+bcolors.ENDC)
+		print(bcolors.OKBLUE+'No or incorrect arguments supplied. Type '+bcolors.BOLD+'rwssl -h'+bcolors.ENDC+bcolors.OKBLUE+' to get help.'+bcolors.ENDC)
