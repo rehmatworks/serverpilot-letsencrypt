@@ -119,7 +119,7 @@ def install_certbot():
 	return 'sudo apt-get update && yes | sudo apt-get install software-properties-common && yes | sudo add-apt-repository ppa:certbot/certbot && yes | sudo apt-get update && yes | sudo apt-get install certbot'
 
 def get_ssl(app):
-	print(bcolors.WARNING+'Obtaining SSL certificate for '+app.get('appname)+'.'+bcolors.ENDC)
+	print(bcolors.WARNING+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
