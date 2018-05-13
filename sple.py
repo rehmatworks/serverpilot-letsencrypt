@@ -3,7 +3,7 @@
 import glob, os
 import nginx
 import argparse
-import subprocess, commands
+import commands
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on ServerPilot free servers.')
 ap.add_argument('-d', '--domain', dest='domain', help='Domain name of the app', default=False)
@@ -121,7 +121,7 @@ def install_certbot():
 def get_ssl(app):
 	print(bcolors.WARNING+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
 	try:
-		subprocess.call(['certbot'])
+		commands.getstatusoutput('certbot')
 	except:
 		print(bcolors.WARNING+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
 		certbotcmd = install_certbot();
