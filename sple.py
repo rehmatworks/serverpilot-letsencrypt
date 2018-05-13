@@ -143,9 +143,10 @@ def get_ssl(app):
 if args.all is True:
 	apps = apps()
 	for app in apps:
-		install = get_ssl(app)
-		if(install):
-			write_conf(app)
+		print(app)
+		# install = get_ssl(app)
+		# if(install):
+		# 	write_conf(app)
 else:
 	if args.appname and args.domain and args.root:
 		app = {'appname': args.appname, 'domains': [args.domain], 'root': args.root}
