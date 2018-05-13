@@ -35,6 +35,7 @@ def apps():
 	spapps = []
 	if os.path.isdir(vhostsdir):
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
+			print(conf_file)
 			c = nginx.loadf(conf_file).as_dict
 			def search(value):
 				data = c.get('conf')
