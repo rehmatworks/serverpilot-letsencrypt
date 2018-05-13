@@ -144,7 +144,7 @@ def renew_ssls():
 	print(bcolors.OKBLUE+'Renewals should have been succeeded for all expiring SSLs.'+bcolors.ENDC)
 
 def get_ssl(app):
-	print(bcolors.OKBLUE+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
+	print(bcolors.OKBLUE+'Obtaining SSL certificate for the app '+app.get('appname')+'.'+bcolors.ENDC)
 	checkcertbot = commands.getstatusoutput('certbot')
 	errcodes = [32512]
 	if checkcertbot[0] in errcodes:
