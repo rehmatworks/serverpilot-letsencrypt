@@ -119,10 +119,10 @@ def install_certbot():
 	return 'sudo apt-get update && yes | sudo apt-get install software-properties-common && yes | sudo add-apt-repository ppa:certbot/certbot && yes | sudo apt-get update && yes | sudo apt-get install certbot'
 
 def get_ssl(app):
-	print(bcolors.WARNING+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
+	print(bcolors.OKBLUE+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
 	checkcertbot = commands.getstatusoutput('certbot')
 	if checkcertbot[0] == '0':
-		print(bcolors.WARNING+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
+		print(bcolors.OKBLUE+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
 		certbotcmd = install_certbot();
 		commands.getstatusoutput(certbotcmd)
 	if(os.path.isdir(app.get('root'))):
@@ -135,7 +135,7 @@ def get_ssl(app):
 		elif 'Failed authorization procedure' in cboutput:
 			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server as well as you have provided the correct root path of your app (including public).'+bcolors.ENDC)
 		elif 'too many requests' in cboutput:
-			print(bcolors.WARNING+'SSL limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
+			print(bcolors.FAIL+'SSL limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
 		else:
 			print(bcolors.FAIL+'Something went wrong. SSL cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
 	else:
