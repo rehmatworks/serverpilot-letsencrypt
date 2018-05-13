@@ -138,9 +138,9 @@ def get_ssl(app):
 	return False
 if args.all is True:
 	apps = apps()
+	print(apps)
+	exit
 	for app in apps:
-		print(app)
-		exit
 		install = get_ssl(app)
 		if(install):
 			write_conf(app)
