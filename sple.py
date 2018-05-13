@@ -3,7 +3,7 @@
 import glob, os
 import nginx
 import argparse
-import commands
+import subprocess, commands
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on ServerPilot free servers.')
 ap.add_argument('-d', '--domain', dest='domain', help='Domain name of the app', default=False)
@@ -120,6 +120,12 @@ def install_certbot():
 
 def get_ssl(app):
 	print(bcolors.WARNING+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
+	try:
+		subprocess.call(['certbot'])
+	except:
+		print(bcolors.WARNING+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
+		certbotcmd = install_certbot();
+		commands.getstatusoutput(certbotcmd)
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
@@ -131,15 +137,8 @@ def get_ssl(app):
 			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server as well as you have provided the correct root path of your app (including public).'+bcolors.ENDC)
 		elif 'too many requests' in cboutput:
 			print(bcolors.WARNING+'SSL limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
-		elif 'command not found' in cboutput:
-			print(bcolors.WARNING+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
-			certbotcmd = install_certbot();
-			commands.getstatusoutput(certbotcmd)
-			cboutput = commands.getstatusoutput(cmd)[0]
-			if 'Congratulations' in cboutput:
-				print(bcolors.OKGREEN+'SSL has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
-			else:
-				print(bcolors.FAIL+'Something went wrong. SSL cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
+		else:
+			print(bcolors.FAIL+'Something went wrong. SSL cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
 	else:
 		print(bcolors.FAIL+'Provided path of the app seems to be invalid.'+bcolors.ENDC)
 		exit
