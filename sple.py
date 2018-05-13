@@ -32,8 +32,9 @@ def find_between(s, first, last):
 		return None
 
 def search(value, data):
-	for blocks in data:
-		# blocks = conf.get('server')
+	for conf in data:
+		print(conf)
+		blocks = conf.get('server')
 		for block in blocks:
 			found = block.get(value)
 			if found:
