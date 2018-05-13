@@ -21,7 +21,7 @@ or
 rwssl --all
 ```
 
-2. Install SSL on all apps except some (Provide comma-separated app names)
+2. Install SSL on all apps ignoring some (Provide comma-separated app names)
 ```bash
 rwssl -i 'app1,app2,app3'
 ```
