@@ -3,7 +3,7 @@
 import glob, os
 import nginx
 import argparse
-import subprocess
+import commands
 
 # Argument parsing
 ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on ServerPilot free servers.')
@@ -34,34 +34,35 @@ def find_between(s, first, last):
 
 def apps():
 	spapps = []
-	for file in os.listdir(vhostsdir):
-		if file.endswith(".conf"):
-			conf_file = os.path.join(vhostsdir, file)
-			c = nginx.loadf(conf_file).as_dict
-			def search(value):
-				data = c.get('conf')
-				for conf in data:
-					blocks = conf.get('server')
-					for block in blocks:
-						found = block.get(value)
-						if found:
-							return found
-				return None
-			try:
-				domains = search('server_name').split() # All app domains
-			except:
-				domains = None
-			try:
-				root = search('root')
-			except:
-				root = None
-			try:
-				appname = find_between(root, 'apps/', '/')
-			except:
-				appname = None
-			if(appname and domains and root):
-				domaininfo = {'domains': domains, 'root': root, 'appname': appname}
-				spapps.append(domaininfo)
+	if os.path.isdir(vhostsdir):
+		for file in os.listdir(vhostsdir):
+			if file.endswith(".conf"):
+				conf_file = os.path.join(vhostsdir, file)
+				c = nginx.loadf(conf_file).as_dict
+				def search(value):
+					data = c.get('conf')
+					for conf in data:
+						blocks = conf.get('server')
+						for block in blocks:
+							found = block.get(value)
+							if found:
+								return found
+					return None
+				try:
+					domains = search('server_name').split() # All app domains
+				except:
+					domains = None
+				try:
+					root = search('root')
+				except:
+					root = None
+				try:
+					appname = find_between(root, 'apps/', '/')
+				except:
+					appname = None
+				if(appname and domains and root):
+					domaininfo = {'domains': domains, 'root': root, 'appname': appname}
+					spapps.append(domaininfo)
 	return spapps
 
 def certbot_command(root, domains):
@@ -117,7 +118,7 @@ def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
-		cboutput = os.popen(cmd).read()
+		cboutput = commands.getstatusoutput(cmd)[1]
 		if 'Congratulations' in cboutput:
 			print(bcolors.OKGREEN+'SSL has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
 			return True
@@ -127,8 +128,9 @@ def get_ssl(app):
 			print(bcolors.WARNING+'SSL limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
 		elif 'command not found' in cboutput:
 			print(bcolors.WARNING+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
-			install_certbot();
-			cboutput = os.popen(cmd).read()
+			certbotcmd = install_certbot();
+			commands.getstatusoutput(certbotcmd)
+			cboutput = commands.getstatusoutput(cmd)[0]
 			if 'Congratulations' in cboutput:
 				print(bcolors.OKGREEN+'SSL has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
 			else:
@@ -138,25 +140,23 @@ def get_ssl(app):
 		exit
 	return False
 
-cmd = 'ls -a'
-subprocess.call(cmd)
-# if args.all is True:
-# 	apps = apps()
-# 	for app in apps:
-# 		install = get_ssl(app)
-# 		if(install):
-# 			write_conf(app)
-# else:
-# 	if args.appname and args.domain and args.root:
-# 		app = {'appname': args.appname, 'domains': [args.domain], 'root': args.root}
-# 		install = get_ssl(app)
-# 		if(install):
-# 			write_conf(app)
+if args.all is True:
+	apps = apps()
+	for app in apps:
+		install = get_ssl(app)
+		if(install):
+			write_conf(app)
+else:
+	if args.appname and args.domain and args.root:
+		app = {'appname': args.appname, 'domains': [args.domain], 'root': args.root}
+		install = get_ssl(app)
+		if(install):
+			write_conf(app)
 
-# 	else:
-# 		if args.appname is False or args.appname is None:
-# 			print(bcolors.FAIL+'App name cannot be blank.'+bcolors.ENDC)
-# 		if args.domain is False or args.domain is None:
-# 			print(bcolors.FAIL+'Domain name cannot be blank.'+bcolors.ENDC)
-# 		if args.root is False or args.root is None:
-# 			print(bcolors.FAIL+'Root directory of the app cannot be blank.'+bcolors.ENDC)
+	else:
+		if args.appname is False or args.appname is None:
+			print(bcolors.FAIL+'App name cannot be blank.'+bcolors.ENDC)
+		if args.domain is False or args.domain is None:
+			print(bcolors.FAIL+'Domain name cannot be blank.'+bcolors.ENDC)
+		if args.root is False or args.root is None:
+			print(bcolors.FAIL+'Root directory of the app cannot be blank.'+bcolors.ENDC)
