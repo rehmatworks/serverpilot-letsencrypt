@@ -129,7 +129,7 @@ def get_app_info(conf_file):
 def install_sp_cron():
 	cronfile = '/etc/cron.d/certbot'
 	if(os.path.exists(cronfile)):
-		print(bcolors.OKBLUE+'CRON job is already added properly and renewals should work.'+bcolors.ENDC)
+		print(bcolors.OKBLUE+'CRON job is already added properly and renewals should work out of the box.'+bcolors.ENDC)
 	else:
 		try:
 			with open(cronfile, 'w') as f:
