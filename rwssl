@@ -168,8 +168,9 @@ elif args.appname:
 		print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
 elif args.ignoreapps:
 	apps = apps()
+	ignoreapps = args.ignoreapps.split(',')
+	print(bcolors.OKBLUE+str(len(ignoreapps))+' apps are being ignored.'+bcolors.ENDC)
 	for app in apps:
-		ignoreapps = args.ignoreapps.split(',')
 		if app.get('appname') not in ignoreapps:
 			install = get_ssl(app)
 			if(install):
