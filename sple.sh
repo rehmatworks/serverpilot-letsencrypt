@@ -3,10 +3,8 @@
 #description    :A tiny script to automate the installation of Let's Encrypt SSL on ServerPilot servers.
 #author         :Rehmat Alam
 #date           :20171108
-#version        :2.0.0
+#version        :2.1
 #usage          :./rwssl.sh
-#notes          :       
-#bash_version   :3.2.57(1)-release
 #============================================================================
 
 if [[ $EUID -ne 0 ]]
@@ -47,17 +45,13 @@ spAppRoot="/srv/users/serverpilot/apps/$appName"
 spSSLDir="/etc/nginx-sp/vhosts.d/"
 
 # Install Let's Encrypt libraries if not found
-if ! hash letsencrypt 2>/dev/null; then
+if ! hash certbot 2>/dev/null; then
 	echo -e "\e[33mLet's Encrypt libs not found. Installing the libraries....\e[39m"
-	lecheck=$(eval "apt-cache show letsencrypt 2>&1")
-	if [[ "$lecheck" == *"No"* ]]
-		then
-		sudo wget --no-check-certificate https://dl.eff.org/certbot-auto  &>/dev/null
-		sudo chmod a+x certbot-auto  &>/dev/null
-		sudo mv certbot-auto /usr/local/bin/letsencrypt  &>/dev/null
-	else
-		sudo apt-get install -y letsencrypt  &>/dev/null
-	fi
+	sudo apt-get update &>/dev/null &&
+		sudo apt-get install software-properties-common &>/dev/null &&
+		sudo add-apt-repository ppa:certbot/certbot &>/dev/null &&
+		sudo apt-get update &>/dev/null &&
+		sudo apt-get install certbot &>/dev/null
 fi
 
 if [ ! -d "$spAppRoot" ]
