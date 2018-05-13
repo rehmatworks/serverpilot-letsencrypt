@@ -121,7 +121,7 @@ def install_certbot():
 def get_ssl(app):
 	print(bcolors.WARNING+'Obtaining SSL certificate for '+app.get('appname')+'.'+bcolors.ENDC)
 	checkcertbot = commands.getstatusoutput('certbot')
-	if checkcertbot[0] is not True:
+	if checkcertbot[0] == '0':
 		print(bcolors.WARNING+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
 		certbotcmd = install_certbot();
 		commands.getstatusoutput(certbotcmd)
