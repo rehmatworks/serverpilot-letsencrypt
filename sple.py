@@ -68,7 +68,7 @@ def certbot_command(root, domains):
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
-	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos"+domainsstr
+	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
 	return cmd
 
 def write_conf(app):
@@ -117,7 +117,6 @@ def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
-		print(cmd)
 		cboutput = commands.getstatusoutput('ls')[1]
 		print(cboutput)
 		return False
