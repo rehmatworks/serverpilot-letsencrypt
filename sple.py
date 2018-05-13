@@ -64,7 +64,7 @@ def apps():
 					domaininfo = {'domains': domains, 'root': root, 'appname': appname}
 					spapps.append(domaininfo)
 	if(len(spapps) > 0):
-		print(bcolors.OKBLUE+len(spapps)+' apps found! Proceeding further...'+bcolors.ENDC)
+		print(bcolors.OKBLUE+str(len(spapps))+' apps found! Proceeding further...'+bcolors.ENDC)
 	else:
 		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps under free serverpilot user.'+bcolors.ENDC)
 	return spapps
