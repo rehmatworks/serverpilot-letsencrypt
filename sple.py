@@ -104,7 +104,7 @@ def write_conf(app):
 		print(bcolors.OKGREEN+'Virtual host file created!'+bcolors.ENDC)
 		print(bcolors.OKBLUE+'Reloading NGINX server...'+bcolors.ENDC)
 		os.system('sudo service nginx-sp reload')
-		print(bcolors.OKGREEN+'SSL should have been installed and activated for the app'+bcolors.BOLD+app.get('appname')+bcolors.ENDC)
+		print(bcolors.OKGREEN+'SSL should have been installed and activated for the app '+bcolors.BOLD+app.get('appname')+bcolors.ENDC)
 		return True
 	except:
 		print(bcolors.FAIL+'Virtual host file cannot be created!'+bcolors.ENDC)
