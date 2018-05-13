@@ -42,6 +42,7 @@ def search(value, data):
 
 def apps():
 	spapps = []
+	print(bcolors.WARNING+'Finding apps for serverpilot user.'+bcolors.ENDC)
 	if os.path.isdir(vhostsdir):
 		for conf_file in glob.glob(vhostsdir+'/*.conf'):
 			if '-ssl.conf' not in conf_file:
@@ -62,6 +63,10 @@ def apps():
 				if(appname and domains and root):
 					domaininfo = {'domains': domains, 'root': root, 'appname': appname}
 					spapps.append(domaininfo)
+	if(len(spapps) > 0):
+		print(bcolors.OKBLUE+len(spapps)+' apps found! Proceeding further...'+bcolors.ENDC)
+	else:
+		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps under free serverpilot user.'+bcolors.ENDC)
 	return spapps
 
 def certbot_command(root, domains):
@@ -114,6 +119,7 @@ def install_certbot():
 	return 'sudo apt-get update && yes | sudo apt-get install software-properties-common && yes | sudo add-apt-repository ppa:certbot/certbot && yes | sudo apt-get update && yes | sudo apt-get install certbot'
 
 def get_ssl(app):
+	print(bcolors.WARNING+'Obtaining SSL certificate for '+app.get('appname)+'.'+bcolors.ENDC)
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains)
