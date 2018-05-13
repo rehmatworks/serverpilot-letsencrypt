@@ -47,6 +47,7 @@ def apps():
 			if '-ssl.conf' not in conf_file:
 				c = nginx.loadf(conf_file).as_dict
 				data = c.get('conf')
+				print(data)
 				try:
 					domains = search('server_name', data).split() # All app domains
 				except:
