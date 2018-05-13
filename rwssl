@@ -170,7 +170,7 @@ elif args.ignoreapps:
 	apps = apps()
 	for app in apps:
 		ignoreapps = args.ignoreapps.split(',')
-		if app not in ignoreapps:
+		if app.get('appname') not in ignoreapps:
 			install = get_ssl(app)
 			if(install):
 				write_conf(app)
