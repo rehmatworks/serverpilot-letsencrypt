@@ -184,4 +184,4 @@ elif args.ignoreapps:
 if args.renew is True:
 	renew_ssls()
 else:
-	args.print_help()
+	ap.print_help()
