@@ -4,10 +4,25 @@ Automate the installation of Let's Encrypt SSL on the free plan of ServerPilot
 
 ## Getting started
 
-#### Install or update `rwssl` on your server
+#### Install 
 ```bash
-git clone https://github.com/rehmatworks/serverpilot-letsencrypt.git && cd serverpilot-letsencrypt && sudo mv rwssl /usr/local/bin/rwssl && sudo chmod +x /usr/local/bin/rwssl
+pip install rwssl
 ```
+PIP not installed? Install it by running `apt-get install python-pip`
+
+#### Upgrade
+If you have used `rwssl` previously on a server, then follow these instructions:
+
+1. Remove old script
+```bash
+rm /usr/local/bin/rwssl
+```
+
+2. Install the latest package
+```bash
+pip install rwssl
+```
+
 If all goes fine, a new command `rwssl` will become available.
 
 ### Install SSLs
