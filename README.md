@@ -76,6 +76,5 @@ Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-e
 ## How to Uninstall
 To unintall `rwssl`, simply delete the script:
 ```bash
-sudo rm /usr/local/bin/rwssl
+sudo pip uninstall rwssl
 ```
-Lastly, edit the crontab by running `crontab -e` command and delete the added CRON jobs responsible for SSL auto-renewals.
