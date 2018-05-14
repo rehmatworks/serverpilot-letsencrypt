@@ -210,8 +210,8 @@ def main():
 			write_conf(app)
 
 	if args.all is True:
-		apps = apps()
-		for app in apps:
+		allapps = apps()
+		for app in allapps:
 			do_final_ssl_install(app)
 
 	elif args.appname:
