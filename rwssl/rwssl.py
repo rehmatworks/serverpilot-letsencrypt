@@ -369,6 +369,7 @@ def main():
 			sslstatus = ssl_status()
 			sslapps = sslstatus.get('ssl')
 			if(len(sslapps) > 0):
+				print(bcolors.HEADER+str(len(sslapps))+' SSL apps found for which HTTP to HTTPS redirect is being enabled.'+bcolors.ENDC)
 				for app in sslapps:
 					force_ssl(app)
 		else:
