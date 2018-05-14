@@ -8,7 +8,7 @@ import commands
 # ServerPilot vhosts directory
 vhostsdir = '/etc/nginx-sp/vhosts.d/'
 # Cron file of certbot
-cronfile = '/etc/cron.d/certbot'
+cronfile = '/etc/cron.d/rwsslrenew'
 # Cron file of rwssl autopilot
 rwsslcron = '/etc/cron.d/rwssl'
 
@@ -135,7 +135,7 @@ def install_sp_cron():
 	else:
 		try:
 			with open(cronfile, 'w') as f:
-				f.write("SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin\n0 */12 * * * root test -x /usr/bin/certbot -a \! -d /run/systemd/system && perl -e 'sleep int(rand(3600))' && certbot -q renew\n")
+				f.write("0 */6 * * * root /usr/local/bin/rwssl -r > /dev/null 2>&1\n")
 			print(bcolors.OKGREEN+'Cron job has been successfully installed for SSL renewals.'+bcolors.ENDC)
 		except:
 			print(bcolors.FAIL+'CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
@@ -198,7 +198,7 @@ def add_autopilot_cron():
 	else:
 		try:
 			with open(rwsslcron, 'w') as f:
-				f.write("* * * * * root /usr/local/bin/rwssl -f > /dev/null\n")
+				f.write("0,10 * * * * root /usr/local/bin/rwssl -f > /dev/null 2>&1\n")
 			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL should get installed on your new apps automatically.'+bcolors.ENDC)
 		except:
 			print(bcolors.FAIL+'Autopilot CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
