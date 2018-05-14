@@ -129,6 +129,55 @@ or
 rwssl --refresh
 ```
 
+### Force HTTPS (301 Redirect):
+You don't need to modify your `.htaccess` file or `nginx` configuration manually to enable HTTP to HTTPS redirect as `rwssl` does it automatically for you.
+
+To force HTTPS on all apps:
+```bash
+rwssl -redir all
+```
+
+or
+
+```bash
+rwssl --redirect all
+```
+
+To force HTTPS on a selected app:
+```bash
+rwssl -redir appname
+```
+
+or
+
+```bash
+rwssl --redirect appname
+```
+
+To disable HTTPS redirect for all apps:
+```bash
+rwssl -noredir all
+```
+
+or
+
+```bash
+rwssl -noredirect all
+```
+
+To disable HTTPS redirect on a selected app:
+```bash
+rwssl -noredir appname
+```
+
+or
+
+```bash
+rwssl -noredirect appname
+```
+
+If you notice redirect loops after enabling `HTTP` to `HTTPS` redirect, then it means that either your SSL vhosts need a refresh (`rwssl -re`) or some of your `.htaccess` rules need to be removed or fixed.
+
 #### Upgrade (Only for old script's users)
 If you have used `rwssl` previously on a server, then follow these instructions:
 
