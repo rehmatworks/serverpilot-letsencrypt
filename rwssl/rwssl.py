@@ -176,7 +176,7 @@ def ssl_status():
 		nonssl = []
 		sslapps = []
 		for app in allapps:
-			if(ssl_installed(app.get('appname'))):
+			if(ssl_installed(app)):
 				sslapps.append(app)
 			else:
 				nonssl.append(app)
