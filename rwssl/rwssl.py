@@ -287,7 +287,7 @@ def disable_force_ssl(app):
 		except:
 			print(bcolors.FAIL+'HTTP to HTTPS redirection cannot be disabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 	else:
-		print(bcolors.WARNING+'HTTP to HTTPS redirection is not enabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
+		print(bcolors.HEADER+'HTTP to HTTPS redirection is not enabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 
 def get_app_vhost(appname):
 	return vhostsdir+appname+'.conf'
