@@ -219,7 +219,7 @@ def disable_autopilot_cron():
 		print(bcolors.OKBLUE+'Autopilot CRON job is not configured yet. No action needed.'+bcolors.ENDC)
 
 def refresh_ssl_apps():
-	confs = get_conf_files()
+	confs = get_conf_files(vhostsdir)
 	sslapps = []
 	if confs:
 		for conf in confs:
