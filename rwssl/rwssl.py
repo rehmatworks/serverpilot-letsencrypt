@@ -218,6 +218,24 @@ def disable_autopilot_cron():
 	else:
 		print(bcolors.OKBLUE+'Autopilot CRON job is not configured yet. No action needed.'+bcolors.ENDC)
 
+def refresh_ssl_apps():
+	confs = get_conf_files()
+	sslapps = []
+	if confs:
+		for conf in confs:
+			if 'ssl.conf' in conf:
+				print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
+				appinfo = get_app_info(conf)
+				if appinfo:
+					sslapps.append(appinfo)
+				os.unlink(conf)
+		if(len(sslapps) > 0):
+			print(bcolors.OKBLUE+'Refreshing SSL certificates for '+str(len(sslapps))+' apps. Obsolete vhosts will be cleaned.'+bcolors.ENDC)
+			for app in sslapps:
+				do_final_ssl_install(app)
+		else:
+			print(bcolors.FAIL+'No apps found to be refreshed'+bcolors.ENDC)
+
 class bcolors:
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'
@@ -239,6 +257,7 @@ def main():
 	ap.add_argument('-ic', '--installcron', dest='installcron', help='Install the cron job for SSL renewals.', action='store_const', const=True, default=False)
 	ap.add_argument('-ap', '--autopilot', dest='autopilot', help='A CRON job that attempts to automatically obtain SSL certificates for newly added apps.', action='store_const', const=True, default=False)
 	ap.add_argument('-na', '--noautopilot', dest='noautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
+	ap.add_argument('-re', '--refresh', dest='refresh', help='Cleans all previous SSL vhost files, reinstalls the SSLs and reloads nginx. Only needed if you are having issues on a server with old SSL installations.', action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
 
@@ -282,5 +301,7 @@ def main():
 		add_autopilot_cron()
 	elif args.noautopilot is True:
 		disable_autopilot_cron()
+	elif args.refresh is True:
+		refresh_ssl_apps()
 	else:
 		ap.print_help()

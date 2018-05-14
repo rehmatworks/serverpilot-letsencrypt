@@ -104,6 +104,19 @@ or
 rwssl --noautopilot
 ```
 
+### Refresh SSL Apps:
+If you have added SSL vhosts in the past yourself or if you have used the old `rwssl` script, then this command is helpful in order to do a cleanup and reinstall SSL certificates/SSL vhosts. You should not run it unless it is too important.
+
+```bash
+rwssl -re
+```
+
+or
+
+```bash
+rwssl --refresh
+```
+
 #### Upgrade (Only for old script's users)
 If you have used `rwssl` previously on a server, then follow these instructions:
 
