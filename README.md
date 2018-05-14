@@ -15,6 +15,17 @@ apt install python-pip
 
 If all goes fine, a new command `rwssl` will become available.
 
+### Get Help on All Available Commands
+```bash
+rwssl -h
+```
+
+or
+
+```bash
+rwssl --help
+```
+
 ### Install SSLs
 
 1. Install SSL on all available apps
