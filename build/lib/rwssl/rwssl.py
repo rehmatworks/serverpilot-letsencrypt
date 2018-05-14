@@ -75,20 +75,6 @@ def main():
 			print(bcolors.FAIL+'No apps found. Ensure that you have created some apps under free serverpilot user.'+bcolors.ENDC)
 		return spapps
 
-	def ssl_status():
-		apps = apps()
-		allapps = False
-		if(len(apps) > 0):
-			nonssl = []
-			sslapps = []
-			for app in apps:
-				if(ssl_installed(app.get('appname'))):
-					sslapps.append(app)
-				else:
-					nonssl.append(app)
-			allapps = {'ssl': sslapps, 'nonssl': nonssl}
-		return allapps
-
 	def certbot_command(root, domains):
 		domainsstr = ''
 		for domain in domains:
@@ -204,21 +190,19 @@ def main():
 			exit
 		return False
 
-	def do_final_ssl_install(app):
-		install = get_ssl(app)
-			if(install):
-				write_conf(app)
-
 	if args.all is True:
 		apps = apps()
 		for app in apps:
-			do_final_ssl_install(app)
-
+			install = get_ssl(app)
+			if(install):
+				write_conf(app)
 	elif args.appname:
 		vhostfile = vhostsdir+args.appname+'.conf'
 		app = get_app_info(vhostfile)
-		if app:
-			do_final_ssl_install(app)
+		if app is not False:
+			install = get_ssl(app)
+			if(install):
+				write_conf(app)
 		else:
 			print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
 	elif args.ignoreapps:
@@ -227,19 +211,14 @@ def main():
 		print(bcolors.OKBLUE+str(len(ignoreapps))+' apps are being ignored.'+bcolors.ENDC)
 		for app in apps:
 			if app.get('appname') not in ignoreapps:
-				do_final_ssl_install(app)
+				install = get_ssl(app)
+				if(install):
+					write_conf(app)
 	elif args.renew is True:
 		renew_ssls()
 	elif args.installcron is True:
 		install_sp_cron()
 	elif args.fresh is True:
-		allapps = ssl_status()
-		nonsslapps = allapps.get('nonssl')
-		if(len(nonsslapps) > 0):
-			print(bcolors.OKBLUE+str(len(nonsslapps))+' non-ssl apps found for which SSL can be obtained. Proceeding...'+bcolors.ENDC)
-			for nonssl in nonsslapps:
-				do_final_ssl_install(nonssl)
-		else:
-			print(bcolors.OKBLUE+'We could not find any apps without SSL certificates installed.'+bcolors.ENDC)
+		print('Wow')
 	else:
 		ap.print_help()
