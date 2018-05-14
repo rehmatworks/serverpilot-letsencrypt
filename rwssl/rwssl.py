@@ -189,6 +189,16 @@ def do_final_ssl_install(app):
 	if(install):
 		write_conf(app)
 
+class bcolors:
+	HEADER = '\033[95m'
+	OKBLUE = '\033[94m'
+	OKGREEN = '\033[92m'
+	WARNING = '\033[93m'
+	FAIL = '\033[91m'
+	ENDC = '\033[0m'
+	BOLD = '\033[1m'
+	UNDERLINE = '\033[4m'
+
 def main():
 	ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot free plan.')
 	ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
@@ -199,15 +209,6 @@ def main():
 	ap.add_argument('-f', '--fresh', dest='fresh', help='Obtain and install SSL certificates for new (non-ssl) apps only.', action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
-	class bcolors:
-		HEADER = '\033[95m'
-		OKBLUE = '\033[94m'
-		OKGREEN = '\033[92m'
-		WARNING = '\033[93m'
-		FAIL = '\033[91m'
-		ENDC = '\033[0m'
-		BOLD = '\033[1m'
-		UNDERLINE = '\033[4m'
 
 	if args.all is True:
 		apps = apps()
