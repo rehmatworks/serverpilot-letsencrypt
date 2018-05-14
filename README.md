@@ -176,7 +176,7 @@ or
 rwssl -noredirect appname
 ```
 
-If you notice redirect loops after enabling `HTTP` to `HTTPS` redirect, then it means that either your SSL vhosts need a refresh (`rwssl -re`) or some of your `.htaccess` rules need to be removed or fixed.
+If you notice redirect loops after enabling `HTTP` to `HTTPS` redirect, then it means that either your SSL vhosts need a refresh (`rwssl -re`) or your website's `.htaccess` rules need to be fixed. In such a scenario, please fix your `.htaccess` file or disable the SSL for the app by running `rwssl -noredir appname` until you sort out the issue.
 
 #### Upgrade (Only for old script's users)
 If you have used `rwssl` previously on a server, then follow these instructions:
