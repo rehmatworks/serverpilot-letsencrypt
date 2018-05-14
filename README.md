@@ -74,7 +74,7 @@ To get help on commands, type `rwssl -h` or `rwssl --help`
 Any questions? Ask me in my blog post [here](https://rehmat.works/install-lets-encrypt-on-the-free-plan-of-serverpilot/).
 
 ## How to Uninstall
-To unintall `rwssl`, simply delete the script:
+To unintall `rwssl`, simply run:
 ```bash
 sudo pip uninstall rwssl
 ```
