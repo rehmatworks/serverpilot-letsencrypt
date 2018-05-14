@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-import glob, os
+import glob, os, sys
 import nginx
 import argparse
 import commands
@@ -236,6 +236,10 @@ def main():
 	ap.add_argument('-na', '--noautopilot', dest='noautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
+
+	if(not os.path.isdir(vhostsdir)):
+		print(bcolors.FAIL+'This package is intended to be used only on ServerPilot servers. Aborting!')
+		sys.exit()
 
 	if args.all is True:
 		apps = apps()
