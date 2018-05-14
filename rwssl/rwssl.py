@@ -211,8 +211,8 @@ def main():
 	args = ap.parse_args()
 
 	if args.all is True:
-		allapps = apps()
-		for app in allapps:
+		apps = apps()
+		for app in apps:
 			do_final_ssl_install(app)
 
 	elif args.appname:
