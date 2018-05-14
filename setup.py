@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='rwssl',
-	version='3.4',
+	version='4.0.0',
 	description='ServerPilot Let\'s Encrypt SSL installation automation script.',
 	author="Rehmat",
 	author_email="contact@rehmat.works",
