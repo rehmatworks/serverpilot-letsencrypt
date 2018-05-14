@@ -269,11 +269,11 @@ def force_ssl(app):
 			print(bcolors.OKBLUE+'HTTP to HTTPS redirect configuration file has been written successfully.'+bcolors.ENDC)
 			print(bcolors.OKBLUE+'Reloading NGINX server...'+bcolors.ENDC)
 			reload_nginx_sp()
-			print(bcolors.OKGREEN+'HTTP to HTTPS redirection has been forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
+			print(bcolors.OKGREEN+'HTTP to HTTPS redirect has been forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 		except:
-			print(bcolors.OKGREEN+'HTTP to HTTPS redirection cannot be forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
+			print(bcolors.OKGREEN+'HTTP to HTTPS redirect cannot be forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 	else:
-		print(bcolors.FAIL+'HTTP to HTTPS redirection cannot be enabled.'+bcolors.ENDC)
+		print(bcolors.FAIL+'HTTP to HTTPS redirect cannot be enabled.'+bcolors.ENDC)
 
 def disable_force_ssl(app):
 	conf_file = app_custom_conf(app)
