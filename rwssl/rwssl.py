@@ -159,6 +159,7 @@ def uninstall_sp_cron():
 def renew_ssls():
 	cmd = 'certbot renew'
 	commands.getstatusoutput(cmd)
+	reload_nginx_sp()
 	print(bcolors.OKBLUE+'Renewals should have been succeeded for all expiring SSLs.'+bcolors.ENDC)
 
 def get_ssl(app):
