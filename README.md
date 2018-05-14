@@ -49,6 +49,15 @@ rwssl --ignore 'app1,app2,app3'
 rwssl -n app_name
 ```
 
+4. Install SSL on all new apps (that doesn't have an SSL yet)
+```bash
+rwssl -f
+```
+or
+```bash
+rwssl --fresh
+```
+
 ### Renew SSLs
 ```bash
 rwssl -r
