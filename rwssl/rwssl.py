@@ -272,7 +272,8 @@ def force_ssl(app):
 			print(bcolors.OKGREEN+'HTTP to HTTPS redirection has been forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 		except:
 			print(bcolors.OKGREEN+'HTTP to HTTPS redirection cannot be forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
-	print(bcolors.FAIL+'Configuration directory doesn\'t exist. Please check and try again.'+bcolors.ENDC)
+	else:
+		print(bcolors.FAIL+'Configuration directory doesn\'t exist. Please check and try again.'+bcolors.ENDC)
 
 def disable_force_ssl(app):
 	conf_file = app_custom_conf(app)
