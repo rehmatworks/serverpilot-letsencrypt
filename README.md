@@ -10,7 +10,7 @@ pip show rwssl
 ```
 If the version is older than 1.0.3, then you need to upgrade it:
 ```bash
-pip uninstal rwssl
+pip uninstall rwssl
 pip install --no-cache-dir rwssl
 ```
 
