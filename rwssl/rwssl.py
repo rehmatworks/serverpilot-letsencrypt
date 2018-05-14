@@ -213,7 +213,7 @@ def add_autopilot_cron():
 	else:
 		try:
 			with open(rwsslcron, 'w') as f:
-				f.write("0/10 * * * * root /usr/local/bin/rwssl -f > /dev/null 2>&1\n")
+				f.write("*/10 * * * * root /usr/local/bin/rwssl -f > /dev/null 2>&1\n")
 			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL should get installed on your new apps automatically.'+bcolors.ENDC)
 		except:
 			print(bcolors.FAIL+'Autopilot CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
@@ -258,7 +258,7 @@ class bcolors:
 
 def main():
 	global apps
-	ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot free plan.')
+	ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot.io.')
 	ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
 	ap.add_argument('-f', '--fresh', dest='fresh', help='Obtain and install SSL certificates for new (non-ssl) apps only.', action='store_const', const=True, default=False)
 	ap.add_argument('-i', '--ignore', dest='ignoreapps', help='Comma-seperated app names to ignore some apps and install SSL for all others.', default=False)

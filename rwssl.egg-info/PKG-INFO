@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: rwssl
-Version: 3.1
+Version: 3.2
 Summary: ServerPilot Let's Encrypt SSL installation automation script.
 Home-page: https://github.com/rehmatworks/serverpilot-letsencrypt
 Author: Rehmat
