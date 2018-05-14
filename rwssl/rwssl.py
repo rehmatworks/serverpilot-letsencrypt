@@ -45,7 +45,7 @@ def ssl_installed(app):
 
 def apps():
 	spapps = []
-	print(bcolors.HEADER+'Finding apps for serverpilot user.'+bcolors.ENDC)
+	print(bcolors.HEADER+'Finding apps...'+bcolors.ENDC)
 	conf_files = get_conf_files(vhostsdir)
 	if conf_files:
 		for conf_file in conf_files:
@@ -56,7 +56,7 @@ def apps():
 	if(len(spapps) > 0):
 		print(bcolors.OKBLUE+str(len(spapps))+' apps found in total. Proceeding further...'+bcolors.ENDC)
 	else:
-		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps under free serverpilot user.'+bcolors.ENDC)
+		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps already.'+bcolors.ENDC)
 	return spapps
 
 def certbot_command(root, domains):
@@ -70,6 +70,7 @@ def write_conf(app):
 	print(bcolors.OKBLUE+'Writing NGINX vhost file for the app '+bcolors.BOLD+app.get('appname')+bcolors.ENDC)
 	appname = app.get('appname')
 	root = app.get('root')
+	username = app.get('username', 'serverpilot')
 	confname = vhostsdir + appname + '-ssl.conf'
 	domains = app.get('domains')
 	c = nginx.Conf()
@@ -83,8 +84,8 @@ def write_conf(app):
 		nginx.Key('ssl_certificate', '/etc/letsencrypt/live/'+domains[0]+'/fullchain.pem'),
 		nginx.Key('ssl_certificate_key', '/etc/letsencrypt/live/'+domains[0]+'/privkey.pem'),
 		nginx.Key('root', root),
-		nginx.Key('access_log', '/srv/users/serverpilot/log/'+appname+'/dev_nginx.access.log main'),
-		nginx.Key('error_log', '/srv/users/serverpilot/log/'+appname+'/dev_nginx.error.log'),
+		nginx.Key('access_log', '/srv/users/'+username+'/log/'+appname+'/dev_nginx.access.log main'),
+		nginx.Key('error_log', '/srv/users/'+username+'/log/'+appname+'/dev_nginx.error.log'),
 		nginx.Key('proxy_set_header', 'Host $host'),
 		nginx.Key('proxy_set_header', 'X-Real-IP $remote_addr'),
 		nginx.Key('proxy_set_header', 'X-Forwarded-For $proxy_add_x_forwarded_for'),
@@ -125,8 +126,12 @@ def get_app_info(conf_file):
 			appname = find_between(root, 'apps/', '/')
 		except:
 			appname = None
+		try:
+			username = find_between(root, 'users/', '/')
+		catch:
+			username = None
 		if(appname and domains and root):
-			domaininfo = {'domains': domains, 'root': root, 'appname': appname}
+			domaininfo = {'domains': domains, 'root': root, 'appname': appname, 'username': username}
 	return domaininfo
 
 def install_sp_cron():
