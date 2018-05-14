@@ -206,8 +206,8 @@ def main():
 
 	def do_final_ssl_install(app):
 		install = get_ssl(app)
-			if(install):
-				write_conf(app)
+		if(install):
+			write_conf(app)
 
 	if args.all is True:
 		apps = apps()
