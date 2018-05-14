@@ -198,7 +198,7 @@ def add_autopilot_cron():
 	else:
 		try:
 			with open(rwsslcron, 'w') as f:
-				f.write("* * * * * root /usr/bin/local/rwssl -f > /dev/null\n")
+				f.write("* * * * * root /usr/local/bin/rwssl -f > /dev/null\n")
 			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL should get installed on your new apps automatically.'+bcolors.ENDC)
 		except:
 			print(bcolors.FAIL+'Autopilot CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
