@@ -273,11 +273,11 @@ def force_ssl(app):
 		except:
 			print(bcolors.OKGREEN+'HTTP to HTTPS redirection cannot be forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 	else:
-		print(bcolors.FAIL+'Configuration directory doesn\'t exist. Please check and try again.'+bcolors.ENDC)
+		print(bcolors.FAIL+'HTTP to HTTPS redirection cannot be enabled.'+bcolors.ENDC)
 
 def disable_force_ssl(app):
 	conf_file = app_custom_conf(app)
-	if(conf_file):
+	if(conf_file and os.path.exists(conf_file)):
 		try:
 			os.unlink(conf_file)
 			print(bcolors.OKBLUE+'Configuration file has been removed.'+bcolors.ENDC)
@@ -285,9 +285,9 @@ def disable_force_ssl(app):
 			reload_nginx_sp()
 			print(bcolors.OKGREEN+'HTTP to HTTPS redirection has been disabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 		except:
-			print(bcolors.OKGREEN+'HTTP to HTTPS redirection cannot be disabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
+			print(bcolors.FAIL+'HTTP to HTTPS redirection cannot be disabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 	else:
-		print(bcolors.FAIL+'Configuration directory doesn\'t exist. Please check and try again.'+bcolors.ENDC)
+		print(bcolors.WARNING+'HTTP to HTTPS redirection is not enabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 
 def get_app_vhost(appname):
 	return vhostsdir+appname+'.conf'
