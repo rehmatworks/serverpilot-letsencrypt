@@ -172,7 +172,7 @@ def get_ssl(app):
 
 def ssl_status():
 	theapps = False
-	allaps = apps()
+	allapps = apps()
 	if(len(allapps) > 0):
 		nonssl = []
 		sslapps = []
