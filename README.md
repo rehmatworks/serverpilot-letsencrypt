@@ -3,7 +3,7 @@ Automate the installation of Let's Encrypt SSL on servers managed by ServerPilot
 
 Update: Now ***rwssl*** can install SSLs for all apps at once with a single command `rwssl -a`
 
-### Attention: All Prevoious Versions Need a Upgrade
+### Attention: All Prevoious Versions Need an Upgrade
 In order to get SSL renewals work flawlessly, all versions prior to v1.0.3 need an upgrade. If you are using the old script and haven't used it using Python PIP, then please scroll to the bottom of this page to learn how to upgrade. If you have installed the package using PIP, then check `rwssl` version like this:
 ```bash
 pip show rwssl
