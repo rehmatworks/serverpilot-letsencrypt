@@ -155,19 +155,20 @@ def main():
 			certbotcmd = install_certbot();
 			commands.getstatusoutput(certbotcmd)
 			print(bcolors.OKGREEN+'Finished installing required libraries.'+bcolors.ENDC)
+			print(bcolors.OKBLUE+'Retrying SSL certificate retrieval for the app '+bcolors.BOLD+app.get('appname')+'.'+bcolors.ENDC)
 		if(os.path.isdir(app.get('root'))):
 			domains = app.get('domains')
 			cmd = certbot_command(app.get('root'), domains)
 			cboutput = commands.getstatusoutput(cmd)[1]
 			if 'Congratulations' in cboutput:
-				print(bcolors.OKGREEN+'SSL has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
+				print(bcolors.OKGREEN+'SSL certificate has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
 				return True
 			elif 'Failed authorization procedure' in cboutput:
 				print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server as well as you have provided the correct root path of your app (including public).'+bcolors.ENDC)
 			elif 'too many requests' in cboutput:
-				print(bcolors.FAIL+'SSL limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
+				print(bcolors.FAIL+'SSL certificates limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
 			else:
-				print(bcolors.FAIL+'Something went wrong. SSL cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
+				print(bcolors.FAIL+'Something went wrong. SSL certificate cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
 		else:
 			print(bcolors.FAIL+'Provided path of the app seems to be invalid.'+bcolors.ENDC)
 			exit
