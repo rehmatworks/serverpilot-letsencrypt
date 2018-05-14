@@ -13,19 +13,6 @@ PIP not installed? Install it by running:
 apt install python-pip
 ```
 
-#### Upgrade (Only for old script's users)
-If you have used `rwssl` previously on a server, then follow these instructions:
-
-1. Remove old script
-```bash
-rm /usr/local/bin/rwssl
-```
-
-2. Install the latest package
-```bash
-pip install rwssl
-```
-
 If all goes fine, a new command `rwssl` will become available.
 
 ### Install SSLs
@@ -79,6 +66,44 @@ or
 
 ```bash
 rwssl --installcron
+```
+
+### Autopilot Mode
+Enable autopilot mode so you will not need to obtain SSL certificates for your new apps manually. This will add a CRON job set to run every `10 minutes`. `rwssl` will check for new non-ssl apps and if any new apps are added, an SSL certificate will be obtained and installed automatically.
+
+Enable Autopilot Mode:
+```bash
+rwssl -ap
+```
+
+or
+
+```bash
+rwssl --autopilot
+```
+
+Disable Autopilot Mode:
+```bash
+rwssl -na
+```
+
+or
+
+```bash
+rwssl --noautopilot
+```
+
+#### Upgrade (Only for old script's users)
+If you have used `rwssl` previously on a server, then follow these instructions:
+
+1. Remove old script
+```bash
+rm /usr/local/bin/rwssl
+```
+
+2. Install the latest package
+```bash
+pip install rwssl
 ```
 
 To get help on commands, type `rwssl -h` or `rwssl --help`
