@@ -1,0 +1,3 @@
+[console_scripts]
+rwssl = rwssl.rwssl:main
+
