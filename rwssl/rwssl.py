@@ -366,14 +366,19 @@ def main():
 		refresh_ssl_apps()
 	elif args.redirect:
 		if args.redirect == 'all':
-			apps = apps()
-			for app in apps:
-				force_ssl(app)
+			sslstatus = ssl_status()
+			sslapps = sslstatus.get('ssl')
+			if(len(sslapps) > 0):
+				for app in sslapps:
+					force_ssl(app)
 		else:
 			vhostfile = get_app_vhost(args.redirect)
 			app = get_app_info(vhostfile)
 			if app:
-				force_ssl(app)
+				if ssl_installed(app):
+					force_ssl(app)
+				else:
+					print(bcolors.FAIL+'SSL is not installed for this app yet so redirect cannot be enabled.'+bcolors.ENDC)
 			else:
 				print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
 	elif args.noredirect:
