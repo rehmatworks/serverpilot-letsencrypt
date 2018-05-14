@@ -75,20 +75,6 @@ def main():
 			print(bcolors.FAIL+'No apps found. Ensure that you have created some apps under free serverpilot user.'+bcolors.ENDC)
 		return spapps
 
-	def ssl_status():
-		apps = apps()
-		allapps = False
-		if(len(apps) > 0):
-			nonssl = []
-			sslapps = []
-			for app in apps:
-				if(ssl_installed(app.get('appname'))):
-					sslapps.append(app)
-				else:
-					nonssl.append(app)
-			allapps = {'ssl': sslapps, 'nonssl': nonssl}
-		return allapps
-
 	def certbot_command(root, domains):
 		domainsstr = ''
 		for domain in domains:
@@ -203,6 +189,20 @@ def main():
 			print(bcolors.FAIL+'Provided path of the app seems to be invalid.'+bcolors.ENDC)
 			exit
 		return False
+
+	def ssl_status():
+		apps = apps()
+		allapps = False
+		if(len(apps) > 0):
+			nonssl = []
+			sslapps = []
+			for app in apps:
+				if(ssl_installed(app.get('appname'))):
+					sslapps.append(app)
+				else:
+					nonssl.append(app)
+			allapps = {'ssl': sslapps, 'nonssl': nonssl}
+		return allapps
 
 	def do_final_ssl_install(app):
 		install = get_ssl(app)
