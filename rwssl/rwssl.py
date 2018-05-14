@@ -232,7 +232,7 @@ def main():
 	ap.add_argument('-r', '--renew', dest='renew', help='Renew all installed SSL certificates which are about to expire.', action='store_const', const=True, default=False)
 	ap.add_argument('-ic', '--installcron', dest='installcron', help='Install the cron job for SSL renewals.', action='store_const', const=True, default=False)
 	ap.add_argument('-f', '--fresh', dest='fresh', help='Obtain and install SSL certificates for new (non-ssl) apps only.', action='store_const', const=True, default=False)
-	ap.add_argument('-ap', '--autopilot', dest='autopilot', help='Attempt to automatically obtain SSL certificates for newly added apps.', action='store_const', const=True, default=False)
+	ap.add_argument('-ap', '--autopilot', dest='autopilot', help='A CRON job that attempts to automatically obtain SSL certificates for newly added apps.', action='store_const', const=True, default=False)
 	ap.add_argument('-na', '--noautopilot', dest='noautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
