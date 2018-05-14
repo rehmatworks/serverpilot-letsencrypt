@@ -7,6 +7,10 @@ import commands
 
 # ServerPilot vhosts directory
 vhostsdir = '/etc/nginx-sp/vhosts.d/'
+# Cron file of certbot
+cronfile = '/etc/cron.d/certbot'
+# Cron file of rwssl autopilot
+rwsslcron = '/etc/cron.d/rwssl'
 
 def find_between(s, first, last):
 	try:
@@ -126,7 +130,6 @@ def get_app_info(conf_file):
 	return domaininfo
 
 def install_sp_cron():
-	cronfile = '/etc/cron.d/certbot'
 	if(os.path.exists(cronfile)):
 		print(bcolors.OKBLUE+'CRON job is already added properly and renewals should work out of the box.'+bcolors.ENDC)
 	else:
@@ -189,6 +192,27 @@ def do_final_ssl_install(app):
 	if(install):
 		write_conf(app)
 
+def add_autopilot_cron():
+	if(os.path.exists(rwsslcron)):
+		print(bcolors.OKBLUE+'Autopilot CRON job is already added and it should be working out of the box.'+bcolors.ENDC)
+	else:
+		try:
+			with open(rwsslcron, 'w') as f:
+				f.write("* * * * * root /usr/bin/local/rwssl -f > /dev/null\n")
+			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL should get installed on your new apps automatically.'+bcolors.ENDC)
+		except:
+			print(bcolors.FAIL+'Autopilot CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
+
+def disable_autopilot_cron():
+	if(os.path.exists(rwsslcron)):
+		try:
+			os.unlink(rwsslcron)
+			print(bcolors.OKBLUE+'Autopilot CRON job has been disabled.'+bcolors.ENDC)
+		except:
+			print(bcolors.FAIL+'An error occured while disabling Autopilot CRON.'+bcolors.ENDC)
+	else:
+		print(bcolors.OKBLUE+'Autopilot CRON job is not configured yet. No action needed.'+bcolors.ENDC)
+
 class bcolors:
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'
@@ -208,6 +232,8 @@ def main():
 	ap.add_argument('-r', '--renew', dest='renew', help='Renew all installed SSL certificates which are about to expire.', action='store_const', const=True, default=False)
 	ap.add_argument('-ic', '--installcron', dest='installcron', help='Install the cron job for SSL renewals.', action='store_const', const=True, default=False)
 	ap.add_argument('-f', '--fresh', dest='fresh', help='Obtain and install SSL certificates for new (non-ssl) apps only.', action='store_const', const=True, default=False)
+	ap.add_argument('-ap', '--autopilot', dest='autopilot', help='Attempt to automatically obtain SSL certificates for newly added apps.', action='store_const', const=True, default=False)
+	ap.add_argument('-da', '--disableautopilot', dest='disableautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
 
@@ -243,5 +269,9 @@ def main():
 				do_final_ssl_install(nonssl)
 		else:
 			print(bcolors.OKBLUE+'We could not find any apps without SSL certificates installed.'+bcolors.ENDC)
+	elif args.autopilot is True:
+		add_autopilot_cron()
+	elif args.disableautopilot is True:
+		disable_autopilot_cron()
 	else:
 		ap.print_help()
