@@ -314,13 +314,13 @@ def main():
 	ap.add_argument('-na', '--noautopilot', dest='noautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
 	ap.add_argument('-re', '--refresh', dest='refresh', help='Cleans all previous SSL vhost files, reinstalls the SSLs and reloads nginx. Only needed if you are having issues on a server with old SSL installations.', action='store_const', const=True, default=False)
 	ap.add_argument('-redir', '--redirect', dest='redirect', help='Apply a 301 redirect from HTTP to HTTPs for a given app or for all apps.', default=False)
-	ap.add_argument('-noredir', '--noredirect', dest='noredirect', help='Disable HTTP to HTTPs redirect for a single app or for all apps.', default=False)
+	ap.add_argument('-noredir', '--noredirect', dest='noredirect', help='Disable HTTP to HTTPs redirection for a single app or for all apps.', default=False)
 
 	args = ap.parse_args()
 
 	if(not os.path.isdir(vhostsdir)):
 		print(bcolors.FAIL+'This package is intended to be used only on ServerPilot servers. Aborting!'+bcolors.ENDC)
-		sys.exit()
+		# sys.exit()
 
 	if args.all is True:
 		apps = apps()
