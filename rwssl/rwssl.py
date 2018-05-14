@@ -172,7 +172,6 @@ def get_ssl(app):
 
 def ssl_status():
 	theapps = False
-	allapps = apps()
 	if(len(allapps) > 0):
 		nonssl = []
 		sslapps = []
@@ -199,6 +198,8 @@ class bcolors:
 	BOLD = '\033[1m'
 	UNDERLINE = '\033[4m'
 
+allapps = apps()
+
 def main():
 	ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot free plan.')
 	ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
@@ -211,8 +212,7 @@ def main():
 	args = ap.parse_args()
 
 	if args.all is True:
-		apps = apps()
-		for app in apps:
+		for app in allapps:
 			do_final_ssl_install(app)
 
 	elif args.appname:
