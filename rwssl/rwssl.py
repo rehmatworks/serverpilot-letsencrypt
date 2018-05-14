@@ -250,7 +250,7 @@ def refresh_ssl_apps():
 def app_conf_dir(app):
 	conf_dir = os.path.join(vhostsdir, app.get('appname')+'.d/')
 	if(os.path.isdir(conf_dir)):
-		return conf_dif
+		return conf_dir
 	else:
 		return False
 
