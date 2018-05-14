@@ -200,6 +200,7 @@ class bcolors:
 	UNDERLINE = '\033[4m'
 
 def main():
+	global apps
 	ap = argparse.ArgumentParser(description='A Python script that automates the SSL installation on Ubuntu servers managed by ServerPilot free plan.')
 	ap.add_argument('-a', '--all', dest='all', help='Install SSL for all available apps.', action='store_const', const=True, default=False)
 	ap.add_argument('-i', '--ignore', dest='ignoreapps', help='Comma-seperated app names to ignore some apps and install SSL for all others.', default=False)
