@@ -235,6 +235,7 @@ def main():
 		install_sp_cron()
 	elif args.fresh is True:
 		sslstatus = ssl_status()
+		print(sslstatus)
 		nonsslapps = sslstatus.get('nonssl')
 		if(len(nonsslapps) > 0):
 			print(bcolors.OKBLUE+str(len(nonsslapps))+' non-ssl apps found for which SSL can be obtained. Proceeding...'+bcolors.ENDC)
