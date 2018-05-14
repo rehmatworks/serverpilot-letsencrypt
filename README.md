@@ -8,7 +8,7 @@ Automate the installation of Let's Encrypt SSL on the free plan of ServerPilot
 ```bash
 pip install rwssl
 ```
-PIP not installed? Install it by running `apt-get install python-pip`
+PIP not installed? Install it by running `apt install python-pip`
 
 #### Upgrade
 If you have used `rwssl` previously on a server, then follow these instructions:
