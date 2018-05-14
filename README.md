@@ -1,5 +1,6 @@
-# Let's Encrypt on Your ServerPilot Free Plan
-Automate the installation of Let's Encrypt SSL on the free plan of ServerPilot
+# Let's Encrypt on Your ServerPilot Servers
+Automate the installation of Let's Encrypt SSL on servers managed by ServerPilot. Both free and paid plans of ServerPilot are supported now. SSLs can be installed on all apps owned by serverpilot or any other user.
+
 #### Update: Now ***rwssl*** can install SSLs for all apps at once with a single command `rwssl -a`
 
 ## Getting started
