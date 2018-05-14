@@ -233,7 +233,7 @@ def main():
 	ap.add_argument('-ic', '--installcron', dest='installcron', help='Install the cron job for SSL renewals.', action='store_const', const=True, default=False)
 	ap.add_argument('-f', '--fresh', dest='fresh', help='Obtain and install SSL certificates for new (non-ssl) apps only.', action='store_const', const=True, default=False)
 	ap.add_argument('-ap', '--autopilot', dest='autopilot', help='Attempt to automatically obtain SSL certificates for newly added apps.', action='store_const', const=True, default=False)
-	ap.add_argument('-da', '--disableautopilot', dest='disableautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
+	ap.add_argument('-na', '--noautopilot', dest='noautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
 
@@ -271,7 +271,7 @@ def main():
 			print(bcolors.OKBLUE+'We could not find any apps without SSL certificates installed.'+bcolors.ENDC)
 	elif args.autopilot is True:
 		add_autopilot_cron()
-	elif args.disableautopilot is True:
+	elif args.noautopilot is True:
 		disable_autopilot_cron()
 	else:
 		ap.print_help()
