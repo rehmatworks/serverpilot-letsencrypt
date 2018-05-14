@@ -69,7 +69,8 @@ or
 rwssl --renew
 ```
 
-### Install CRON Job for SSL Renewals
+### CRON Job for SSL Renewals
+Install the CRON job:
 ```bash
 rwssl -ic
 ```
@@ -77,6 +78,16 @@ or
 
 ```bash
 rwssl --installcron
+```
+
+Uninstall the CRON job (Renewals will not be carried out by `rwssl`):
+```bash
+rwssl -dc
+```
+or
+
+```bash
+rwssl --deletecron
 ```
 
 ### Autopilot Mode

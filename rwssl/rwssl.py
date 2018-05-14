@@ -145,6 +145,16 @@ def install_sp_cron():
 		except:
 			print(bcolors.FAIL+'CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
 
+def uninstall_sp_cron():
+	if(os.path.exists(cronfile)):
+		try:
+			os.unlink(cronfile)
+			print(bcolors.OKBLUE+'SSL renewal CRON job has been disabled.'+bcolors.ENDC)
+		except:
+			print(bcolors.OKBLUE+'The CRON job cannot be disabled. Please try again.'+bcolors.ENDC)
+	else:
+		print(bcolors.OKBLUE+'SSL renewal CRON job is not configured. No action needed.'+bcolors.ENDC)
+
 def renew_ssls():
 	cmd = 'certbot renew'
 	commands.getstatusoutput(cmd)
@@ -255,6 +265,7 @@ def main():
 	ap.add_argument('-n', '--name', dest='appname', help='Name of the app where SSL should be installed.', default=False)
 	ap.add_argument('-r', '--renew', dest='renew', help='Renew all installed SSL certificates which are about to expire.', action='store_const', const=True, default=False)
 	ap.add_argument('-ic', '--installcron', dest='installcron', help='Install the cron job for SSL renewals.', action='store_const', const=True, default=False)
+	ap.add_argument('-dc', '--deletecron', dest='deletecron', help='Uninstall the cron job responsible for SSL renewals.', action='store_const', const=True, default=False)
 	ap.add_argument('-ap', '--autopilot', dest='autopilot', help='A CRON job that attempts to automatically obtain SSL certificates for newly added apps.', action='store_const', const=True, default=False)
 	ap.add_argument('-na', '--noautopilot', dest='noautopilot', help='Disable Autopilot mode and disable automatic SSLs for your apps.', action='store_const', const=True, default=False)
 	ap.add_argument('-re', '--refresh', dest='refresh', help='Cleans all previous SSL vhost files, reinstalls the SSLs and reloads nginx. Only needed if you are having issues on a server with old SSL installations.', action='store_const', const=True, default=False)
@@ -288,6 +299,8 @@ def main():
 		renew_ssls()
 	elif args.installcron is True:
 		install_sp_cron()
+	elif args.deletecron is True:
+		uninstall_sp_cron()
 	elif args.fresh is True:
 		sslstatus = ssl_status()
 		nonsslapps = sslstatus.get('nonssl')
