@@ -266,7 +266,7 @@ def force_ssl(app):
 		try:
 			with open(conf_file, 'w') as f:
 				f.write("return 301 https://$host$request_uri;")
-			print(bcolors.OKBLUE+'Configuration file has been written successfully.'+bcolors.ENDC)
+			print(bcolors.OKBLUE+'HTTP to HTTPS redirect configuration file has been written successfully.'+bcolors.ENDC)
 			print(bcolors.OKBLUE+'Reloading NGINX server...'+bcolors.ENDC)
 			reload_nginx_sp()
 			print(bcolors.OKGREEN+'HTTP to HTTPS redirection has been forced for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
@@ -280,7 +280,7 @@ def disable_force_ssl(app):
 	if(conf_file and os.path.exists(conf_file)):
 		try:
 			os.unlink(conf_file)
-			print(bcolors.OKBLUE+'Configuration file has been removed.'+bcolors.ENDC)
+			print(bcolors.OKBLUE+'HTTP to HTTPS redirect configuration file has been removed.'+bcolors.ENDC)
 			print(bcolors.OKBLUE+'Reloading NGINX server...'+bcolors.ENDC)
 			reload_nginx_sp()
 			print(bcolors.OKGREEN+'HTTP to HTTPS redirection has been disabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
