@@ -129,7 +129,7 @@ def get_app_info(conf_file):
 		try:
 			username = find_between(root, 'users/', '/')
 		except:
-			username = None
+			username = 'serverpilot'
 		if(appname and domains and root):
 			domaininfo = {'domains': domains, 'root': root, 'appname': appname, 'username': username}
 	return domaininfo
