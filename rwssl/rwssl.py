@@ -74,6 +74,8 @@ def main():
 		else:
 			print(bcolors.FAIL+'No apps found. Ensure that you have created some apps under free serverpilot user.'+bcolors.ENDC)
 		return spapps
+	
+	allapps = apps()
 
 	def certbot_command(root, domains):
 		domainsstr = ''
@@ -191,18 +193,17 @@ def main():
 		return False
 
 	def ssl_status():
-		apps = apps()
-		allapps = False
-		if(len(apps) > 0):
+		theapps = False
+		if(len(allapps) > 0):
 			nonssl = []
 			sslapps = []
-			for app in apps:
+			for app in allapps:
 				if(ssl_installed(app.get('appname'))):
 					sslapps.append(app)
 				else:
 					nonssl.append(app)
-			allapps = {'ssl': sslapps, 'nonssl': nonssl}
-		return allapps
+			theapps = {'ssl': sslapps, 'nonssl': nonssl}
+		return theapps
 
 	def do_final_ssl_install(app):
 		install = get_ssl(app)
@@ -210,8 +211,8 @@ def main():
 			write_conf(app)
 
 	if args.all is True:
-		allapps = apps()
-		for app in allapps:
+		apps = apps()
+		for app in apps:
 			do_final_ssl_install(app)
 
 	elif args.appname:
@@ -233,8 +234,8 @@ def main():
 	elif args.installcron is True:
 		install_sp_cron()
 	elif args.fresh is True:
-		allapps = ssl_status()
-		nonsslapps = allapps.get('nonssl')
+		appstatus = ssl_status()
+		nonsslapps = appstatus.get('nonssl')
 		if(len(nonsslapps) > 0):
 			print(bcolors.OKBLUE+str(len(nonsslapps))+' non-ssl apps found for which SSL can be obtained. Proceeding...'+bcolors.ENDC)
 			for nonssl in nonsslapps:
