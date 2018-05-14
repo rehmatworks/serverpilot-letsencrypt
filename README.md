@@ -10,7 +10,7 @@ pip install rwssl
 ```
 PIP not installed? Install it by running `apt install python-pip`
 
-#### Upgrade
+#### Upgrade (Only for old script's users)
 If you have used `rwssl` previously on a server, then follow these instructions:
 
 1. Remove old script
