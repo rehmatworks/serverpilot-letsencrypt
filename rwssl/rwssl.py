@@ -6,7 +6,7 @@ import commands
 import argparse
 # ServerPilot vhosts directory
 vhostsdir = '/etc/nginx-sp/vhosts.d/'
-# Cron file of certbot
+# Cron file of rwssl renewal
 cronfile = '/etc/cron.d/rwsslrenew'
 # Cron file of rwssl autopilot
 rwsslcron = '/etc/cron.d/rwssl'
@@ -216,7 +216,7 @@ def add_autopilot_cron():
 		try:
 			with open(rwsslcron, 'w') as f:
 				f.write("*/10 * * * * root /usr/local/bin/rwssl -f > /dev/null 2>&1\n")
-			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL should get installed on your new apps automatically.'+bcolors.ENDC)
+			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL certs should get installed on your new apps automatically.'+bcolors.ENDC)
 		except:
 			print(bcolors.FAIL+'Autopilot CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
 
@@ -236,17 +236,17 @@ def refresh_ssl_apps():
 	if confs:
 		for conf in confs:
 			if 'ssl.conf' in conf:
-				print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
 				appinfo = get_app_info(conf)
 				if appinfo:
 					sslapps.append(appinfo)
+				print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
 				os.unlink(conf)
 		if(len(sslapps) > 0):
 			print(bcolors.OKBLUE+'Refreshing SSL certificates for '+str(len(sslapps))+' apps. Obsolete vhosts will be cleaned.'+bcolors.ENDC)
 			for app in sslapps:
 				do_final_ssl_install(app)
 		else:
-			print(bcolors.FAIL+'No apps found to be refreshed'+bcolors.ENDC)
+			print(bcolors.FAIL+'No apps need to be refreshed.'+bcolors.ENDC)
 
 def app_conf_dir(app):
 	conf_dir = os.path.join(vhostsdir, app.get('appname')+'.d/')
