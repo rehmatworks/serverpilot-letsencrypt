@@ -291,7 +291,7 @@ def disable_force_ssl(app):
 		print(bcolors.HEADER+'HTTP to HTTPS redirection is not enabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 
 def get_app_vhost(appname):
-	return vhostsdir+appname+'.conf'
+	return os.path.join(vhostsdir, appname+'.conf')
 
 class bcolors:
 	HEADER = '\033[95m'
