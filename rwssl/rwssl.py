@@ -66,11 +66,9 @@ def certbot_command(root, domains, wildcard):
 	for domain in domains:
 		domainsstr += ' -d '+domain
 	if wildcard:
-		print('Wildcard')
+		cmd = "certbot certonly --manual --agree-tos --no-bootstrap --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory"+domainsstr
 	else:
-		print('Non wildcard')
-	sys.exit()
-	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
+		cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
 	return cmd
 
 def write_conf(app):
@@ -188,6 +186,8 @@ def get_ssl(app, wildcard):
 			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server as well as you have provided the correct root path of your app (including public).'+bcolors.ENDC)
 		elif 'too many requests' in cboutput:
 			print(bcolors.FAIL+'SSL certificates limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
+		elif '_acme-challenge' in cboutput:
+			print(bcolors.OKBLUE+cboutput+bcolors.ENDC)
 		else:
 			print(bcolors.FAIL+'Something went wrong. SSL certificate cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
 	else:
