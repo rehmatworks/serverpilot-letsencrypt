@@ -1,7 +1,18 @@
 # Let's Encrypt on Your ServerPilot Servers
 Automate the installation of Let's Encrypt SSL on servers managed by ServerPilot. Both free and paid plans of ServerPilot are supported now. SSLs can be installed on all apps owned by serverpilot or any other user.
 
-#### Update: Now ***rwssl*** can install SSLs for all apps at once with a single command `rwssl -a`
+Update: Now ***rwssl*** can install SSLs for all apps at once with a single command `rwssl -a`
+
+### Attention: All Prevoious Versions Need an Upgrade
+In order to get SSL renewals work flawlessly, all versions prior to v1.0.3 need an upgrade. If you are using the old script and haven't installed it using Python PIP, then please scroll to the bottom of this page to learn how to upgrade. If you have installed the package using PIP, then check `rwssl` version like this:
+```bash
+pip show rwssl
+```
+If the version is older than 1.0.3, then you need to upgrade it:
+```bash
+pip uninstall rwssl
+pip install --no-cache-dir rwssl
+```
 
 ## Getting started
 
@@ -176,7 +187,7 @@ or
 rwssl -noredirect appname
 ```
 
-If you notice redirect loops after enabling `HTTP` to `HTTPS` redirect, then it means that either your SSL vhosts need a refresh (`rwssl -re`) or some of your `.htaccess` rules need to be removed or fixed.
+If you notice redirect loops after enabling `HTTP` to `HTTPS` redirect, then it means that either your SSL vhosts need a refresh (`rwssl -re`) or your website's `.htaccess` rules need to be fixed. In such a scenario, please fix your `.htaccess` file or disable the SSL for the app by running `rwssl -noredir appname` until you sort out the issue.
 
 #### Upgrade (Only for old script's users)
 If you have used `rwssl` previously on a server, then follow these instructions:
