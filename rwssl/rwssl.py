@@ -323,7 +323,7 @@ def main():
 	ap.add_argument('-re', '--refresh', dest='refresh', help='Cleans all previous SSL vhost files, reinstalls the SSLs and reloads nginx. Only needed if you are having issues on a server with old SSL installations.', action='store_const', const=True, default=False)
 	ap.add_argument('-redir', '--redirect', dest='redirect', help='Apply a 301 redirect from HTTP to HTTPs for a given app or for all apps.', default=False)
 	ap.add_argument('-noredir', '--noredirect', dest='noredirect', help='Disable HTTP to HTTPs redirect for a single app or for all apps.', default=False)
-	ap.add_argument('-w', '--wildcard', dest='wildcard', help='Obtain a wildcard SSL. Requires DNS verification.' action='store_const', const=True, default=False)
+	ap.add_argument('-w', '--wildcard', dest='wildcard', help='Obtain a wildcard SSL. Requires DNS verification.', action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
 
