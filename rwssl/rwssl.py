@@ -6,7 +6,7 @@ import commands
 import argparse
 # ServerPilot vhosts directory
 vhostsdir = '/etc/nginx-sp/vhosts.d/'
-# Cron file of certbot
+# Cron file of rwssl renewal
 cronfile = '/etc/cron.d/rwsslrenew'
 # Cron file of rwssl autopilot
 rwsslcron = '/etc/cron.d/rwssl'
@@ -61,16 +61,15 @@ def apps():
 		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps already.'+bcolors.ENDC)
 	return spapps
 
-def certbot_command(root, domains, wild):
+def certbot_command(root, domains):
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
-	if wild:
-		print('Wild')
-		sys.exit()
+	if args.wildcard:
+		print('Wildcard')
 	else:
-		print('Non wild')
-		sys.exit()
+		print('Non wildcard')
+	sys.exit()
 	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
 	return cmd
 
@@ -165,9 +164,10 @@ def uninstall_sp_cron():
 def renew_ssls():
 	cmd = 'certbot renew'
 	commands.getstatusoutput(cmd)
+	reload_nginx_sp()
 	print(bcolors.OKBLUE+'Renewals should have been succeeded for all expiring SSLs.'+bcolors.ENDC)
 
-def get_ssl(app, wild):
+def get_ssl(app):
 	print(bcolors.OKBLUE+'Obtaining SSL certificate for the app '+bcolors.BOLD+app.get('appname')+'.'+bcolors.ENDC)
 	checkcertbot = commands.getstatusoutput('certbot')
 	errcodes = [32512]
@@ -179,7 +179,7 @@ def get_ssl(app, wild):
 		print(bcolors.OKBLUE+'Retrying SSL certificate retrieval for the app '+bcolors.BOLD+app.get('appname')+'.'+bcolors.ENDC)
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
-		cmd = certbot_command(app.get('root'), domains, wild)
+		cmd = certbot_command(app.get('root'), domains)
 		cboutput = commands.getstatusoutput(cmd)[1]
 		if 'Congratulations' in cboutput:
 			print(bcolors.OKGREEN+'SSL certificate has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
@@ -209,8 +209,8 @@ def ssl_status():
 		theapps = {'ssl': sslapps, 'nonssl': nonssl}
 	return theapps
 
-def do_final_ssl_install(app, wild):
-	install = get_ssl(app, wild)
+def do_final_ssl_install(app):
+	install = get_ssl(app)
 	if(install):
 		write_conf(app)
 
@@ -221,7 +221,7 @@ def add_autopilot_cron():
 		try:
 			with open(rwsslcron, 'w') as f:
 				f.write("*/10 * * * * root /usr/local/bin/rwssl -f > /dev/null 2>&1\n")
-			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL should get installed on your new apps automatically.'+bcolors.ENDC)
+			print(bcolors.OKGREEN+'Autopilot CRON job has been added and now SSL certs should get installed on your new apps automatically.'+bcolors.ENDC)
 		except:
 			print(bcolors.FAIL+'Autopilot CRON job cannot be added. Please ensure that you have root privileges.'+bcolors.ENDC)
 
@@ -241,17 +241,17 @@ def refresh_ssl_apps():
 	if confs:
 		for conf in confs:
 			if 'ssl.conf' in conf:
-				print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
 				appinfo = get_app_info(conf)
 				if appinfo:
 					sslapps.append(appinfo)
+				print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
 				os.unlink(conf)
 		if(len(sslapps) > 0):
 			print(bcolors.OKBLUE+'Refreshing SSL certificates for '+str(len(sslapps))+' apps. Obsolete vhosts will be cleaned.'+bcolors.ENDC)
 			for app in sslapps:
-				do_final_ssl_install(app, wild)
+				do_final_ssl_install(app)
 		else:
-			print(bcolors.FAIL+'No apps found to be refreshed'+bcolors.ENDC)
+			print(bcolors.FAIL+'No apps need to be refreshed.'+bcolors.ENDC)
 
 def app_conf_dir(app):
 	conf_dir = os.path.join(vhostsdir, app.get('appname')+'.d/')
@@ -296,7 +296,7 @@ def disable_force_ssl(app):
 		print(bcolors.HEADER+'HTTP to HTTPS redirection is not enabled for '+' '.join(app.get('domains'))+'.'+bcolors.ENDC)
 
 def get_app_vhost(appname):
-	return vhostsdir+appname+'.conf'
+	return os.path.join(vhostsdir, appname+'.conf')
 
 class bcolors:
 	HEADER = '\033[95m'
@@ -323,10 +323,10 @@ def main():
 	ap.add_argument('-re', '--refresh', dest='refresh', help='Cleans all previous SSL vhost files, reinstalls the SSLs and reloads nginx. Only needed if you are having issues on a server with old SSL installations.', action='store_const', const=True, default=False)
 	ap.add_argument('-redir', '--redirect', dest='redirect', help='Apply a 301 redirect from HTTP to HTTPs for a given app or for all apps.', default=False)
 	ap.add_argument('-noredir', '--noredirect', dest='noredirect', help='Disable HTTP to HTTPs redirect for a single app or for all apps.', default=False)
-	ap.add_argument('-w', '--wild', dest='wildcard', help='Obtain a wildcard SSL certificate. DNS challenge is required.', action='store_const', const=True, default=False)
+	ap.add_argument('-w', '--wildcard', dest='wildcard', help='Obtain a wildcard SSL. Requires DNS verification.' action='store_const', const=True, default=False)
 
 	args = ap.parse_args()
-	wildcard = args.wildcard
+
 	if(not os.path.isdir(vhostsdir)):
 		print(bcolors.FAIL+'This package is intended to be used only on ServerPilot servers. Aborting!'+bcolors.ENDC)
 		sys.exit()
@@ -334,13 +334,13 @@ def main():
 	if args.all is True:
 		apps = apps()
 		for app in apps:
-			do_final_ssl_install(app, wildcard)
+			do_final_ssl_install(app)
 
 	elif args.appname:
 		vhostfile = get_app_vhost(args.appname)
 		app = get_app_info(vhostfile)
 		if app:
-			do_final_ssl_install(app, wild)
+			do_final_ssl_install(app)
 		else:
 			print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
 	elif args.ignoreapps:
@@ -349,7 +349,7 @@ def main():
 		print(bcolors.OKBLUE+str(len(ignoreapps))+' apps are being ignored.'+bcolors.ENDC)
 		for app in apps:
 			if app.get('appname') not in ignoreapps:
-				do_final_ssl_install(app, wild)
+				do_final_ssl_install(app)
 	elif args.renew is True:
 		renew_ssls()
 	elif args.installcron is True:
@@ -362,7 +362,7 @@ def main():
 		if(len(nonsslapps) > 0):
 			print(bcolors.OKBLUE+str(len(nonsslapps))+' non-ssl apps found for which SSL can be obtained. Proceeding...'+bcolors.ENDC)
 			for nonssl in nonsslapps:
-				do_final_ssl_install(nonssl, wild)
+				do_final_ssl_install(nonssl)
 		else:
 			print(bcolors.OKBLUE+'We could not find any apps without SSL certificates installed.'+bcolors.ENDC)
 	elif args.autopilot is True:
