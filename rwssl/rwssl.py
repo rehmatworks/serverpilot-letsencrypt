@@ -61,11 +61,14 @@ def apps():
 		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps already.'+bcolors.ENDC)
 	return spapps
 
-def certbot_command(root, domains):
+def certbot_command(root, domains, wild = False):
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
-	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
+	if wild:
+		cmd = "certbot certonly --manual --register-unsafely-without-email --agree-tos --no-bootstrap --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory --force-renewal"+domainsstr
+	else:
+		cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
 	return cmd
 
 def write_conf(app):
@@ -183,6 +186,8 @@ def get_ssl(app):
 			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server as well as you have provided the correct root path of your app (including public).'+bcolors.ENDC)
 		elif 'too many requests' in cboutput:
 			print(bcolors.FAIL+'SSL certificates limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
+		elif '_acme-challenge.' in cboutput:
+			print(cboutput)
 		else:
 			print(bcolors.FAIL+'Something went wrong. SSL certificate cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
 	else:
