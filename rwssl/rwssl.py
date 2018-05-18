@@ -61,14 +61,11 @@ def apps():
 		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps already.'+bcolors.ENDC)
 	return spapps
 
-def certbot_command(root, domains, wildcard):
+def certbot_command(root, domains):
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
-	if wildcard:
-		cmd = "certbot certonly --manual --agree-tos --no-bootstrap --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory"+domainsstr
-	else:
-		cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
+	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
 	return cmd
 
 def write_conf(app):
@@ -165,29 +162,19 @@ def renew_ssls():
 	reload_nginx_sp()
 	print(bcolors.OKBLUE+'Renewals should have been succeeded for all expiring SSLs.'+bcolors.ENDC)
 
-def get_ssl(app, wildcard):
+def get_ssl(app):
 	print(bcolors.OKBLUE+'Obtaining SSL certificate for the app '+bcolors.BOLD+app.get('appname')+'.'+bcolors.ENDC)
-	checkcertbot = commands.getstatusoutput('certbot')
-	errcodes = [32512]
-	if checkcertbot[0] in errcodes:
-		print(bcolors.OKBLUE+'Certbot (Let\'s Encrypt libraries) not found. Installing libs.'+bcolors.ENDC)
-		certbotcmd = install_certbot();
-		commands.getstatusoutput(certbotcmd)
-		print(bcolors.OKGREEN+'Finished installing required libraries.'+bcolors.ENDC)
-		print(bcolors.OKBLUE+'Retrying SSL certificate retrieval for the app '+bcolors.BOLD+app.get('appname')+'.'+bcolors.ENDC)
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
-		cmd = certbot_command(app.get('root'), domains, wildcard)
+		cmd = certbot_command(app.get('root'), domains)
 		cboutput = commands.getstatusoutput(cmd)[1]
 		if 'Congratulations' in cboutput:
 			print(bcolors.OKGREEN+'SSL certificate has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
 			return True
 		elif 'Failed authorization procedure' in cboutput:
-			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server as well as you have provided the correct root path of your app (including public).'+bcolors.ENDC)
+			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server.'+bcolors.ENDC)
 		elif 'too many requests' in cboutput:
 			print(bcolors.FAIL+'SSL certificates limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
-		elif '_acme-challenge' in cboutput:
-			print(bcolors.OKBLUE+cboutput+bcolors.ENDC)
 		else:
 			print(bcolors.FAIL+'Something went wrong. SSL certificate cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
 	else:
@@ -195,6 +182,16 @@ def get_ssl(app, wildcard):
 		exit
 	return False
 
+def do_initial_config():
+	checkcertbot = commands.getstatusoutput('certbot')
+	errcodes = [32512]
+	if checkcertbot[0] in errcodes:
+		print(bcolors.OKBLUE+'Required (certbot) libraries not found. Performing initial (one-time) setup...'+bcolors.ENDC)
+		certbotcmd = install_certbot();
+		commands.getstatusoutput(certbotcmd)
+		print(bcolors.OKGREEN+'Finished installing required libraries. Please re-run your previous command now.'+bcolors.ENDC)
+		sys.exit()
+		
 def ssl_status():
 	theapps = False
 	allapps = apps()
@@ -209,8 +206,8 @@ def ssl_status():
 		theapps = {'ssl': sslapps, 'nonssl': nonssl}
 	return theapps
 
-def do_final_ssl_install(app, wildcard):
-	install = get_ssl(app, wildcard)
+def do_final_ssl_install(app):
+	install = get_ssl(app)
 	if(install):
 		write_conf(app)
 
@@ -235,7 +232,7 @@ def disable_autopilot_cron():
 	else:
 		print(bcolors.OKBLUE+'Autopilot CRON job is not configured yet. No action needed.'+bcolors.ENDC)
 
-def refresh_ssl_apps(wildcard):
+def refresh_ssl_apps():
 	confs = get_conf_files(vhostsdir)
 	sslapps = []
 	if confs:
@@ -249,7 +246,7 @@ def refresh_ssl_apps(wildcard):
 		if(len(sslapps) > 0):
 			print(bcolors.OKBLUE+'Refreshing SSL certificates for '+str(len(sslapps))+' apps. Obsolete vhosts will be cleaned.'+bcolors.ENDC)
 			for app in sslapps:
-				do_final_ssl_install(app, wildcard)
+				do_final_ssl_install(app)
 		else:
 			print(bcolors.FAIL+'No apps need to be refreshed.'+bcolors.ENDC)
 
@@ -323,7 +320,9 @@ def main():
 	ap.add_argument('-re', '--refresh', dest='refresh', help='Cleans all previous SSL vhost files, reinstalls the SSLs and reloads nginx. Only needed if you are having issues on a server with old SSL installations.', action='store_const', const=True, default=False)
 	ap.add_argument('-redir', '--redirect', dest='redirect', help='Apply a 301 redirect from HTTP to HTTPs for a given app or for all apps.', default=False)
 	ap.add_argument('-noredir', '--noredirect', dest='noredirect', help='Disable HTTP to HTTPs redirect for a single app or for all apps.', default=False)
-	ap.add_argument('-w', '--wildcard', dest='wildcard', help='Obtain a wildcard SSL. Requires DNS verification.', action='store_const', const=True, default=False)
+
+	# Install certbo libs if not found
+	do_initial_config()
 
 	args = ap.parse_args()
 
@@ -334,13 +333,13 @@ def main():
 	if args.all is True:
 		apps = apps()
 		for app in apps:
-			do_final_ssl_install(app, args.wildcard)
+			do_final_ssl_install(app)
 
 	elif args.appname:
 		vhostfile = get_app_vhost(args.appname)
 		app = get_app_info(vhostfile)
 		if app:
-			do_final_ssl_install(app, args.wildcard)
+			do_final_ssl_install(app)
 		else:
 			print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
 	elif args.ignoreapps:
@@ -349,7 +348,7 @@ def main():
 		print(bcolors.OKBLUE+str(len(ignoreapps))+' apps are being ignored.'+bcolors.ENDC)
 		for app in apps:
 			if app.get('appname') not in ignoreapps:
-				do_final_ssl_install(app, args.wildcard)
+				do_final_ssl_install(app)
 	elif args.renew is True:
 		renew_ssls()
 	elif args.installcron is True:
@@ -362,7 +361,7 @@ def main():
 		if(len(nonsslapps) > 0):
 			print(bcolors.OKBLUE+str(len(nonsslapps))+' non-ssl apps found for which SSL can be obtained. Proceeding...'+bcolors.ENDC)
 			for nonssl in nonsslapps:
-				do_final_ssl_install(nonssl, args.wildcard)
+				do_final_ssl_install(nonssl)
 		else:
 			print(bcolors.OKBLUE+'We could not find any apps without SSL certificates installed.'+bcolors.ENDC)
 	elif args.autopilot is True:
@@ -370,7 +369,7 @@ def main():
 	elif args.noautopilot is True:
 		disable_autopilot_cron()
 	elif args.refresh is True:
-		refresh_ssl_apps(args.wildcard)
+		refresh_ssl_apps()
 	elif args.redirect:
 		if args.redirect == 'all':
 			sslstatus = ssl_status()
