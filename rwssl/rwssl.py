@@ -62,6 +62,7 @@ def apps():
 	return spapps
 
 def certbot_command(root, domains):
+	global wild
 	domainsstr = ''
 	for domain in domains:
 		domainsstr += ' -d '+domain
