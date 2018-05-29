@@ -84,7 +84,9 @@ def certbot_command(root, domains, path):
 	domainsstr = ''
 	for domain in domains:
 		# Only adding valid domains
-		if True validators.domain(domain):
+		print('Checking ' + domain)
+		if validators.domain(domain):
+			print(domain + ' is valid')
 			domainsstr += ' -d '+domain
 	if domainsstr:
 		cmd = "certbot certonly --webroot -w "+root+" --cert-path "+path+" --key-path "+path+" --fullchain-path "+path+" --chain-path "+path+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
