@@ -70,13 +70,13 @@ def rwssl_clean_domains(domains):
 	# Clean domains
 	for domain in domains:
 		cleaneddomain = url.sub('', domain).strip().strip('/');
+		print(cleaneddomain)
 		if validators.domain(cleaneddomain):
 			domainsarr.append(validdomain)
 	return domainsarr
 
 def get_first_domain(domains):
 	# Find first valid domain
-	print(domains)
 	if isinstance(domains, list):
 		return domains[0]
 	return False
