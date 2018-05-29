@@ -383,7 +383,7 @@ def main():
 			app = get_app_info(vhostfile)
 			do_final_ssl_install(app)
 		except ValueError as e:
-			print(bcolors.FAIL+e+bcolors.ENDC)
+			print(bcolors.FAIL+str(e)+bcolors.ENDC)
 	elif args.ignoreapps:
 		apps = apps()
 		ignoreapps = args.ignoreapps.split(',')
@@ -429,7 +429,7 @@ def main():
 				else:
 					print(bcolors.FAIL+'SSL is not installed for this app yet so redirect cannot be enabled.'+bcolors.ENDC)
 			except ValueError as e:
-				print(bcolors.FAIL+e+bcolors.ENDC)
+				print(bcolors.FAIL+str(e)+bcolors.ENDC)
 	elif args.noredirect:
 		if args.noredirect == 'all':
 			apps = apps()
@@ -441,7 +441,7 @@ def main():
 				app = get_app_info(vhostfile)
 				disable_force_ssl(app)
 			except ValueError as e:
-				print(bcolors.FAIL+e+bcolors.ENDC)
+				print(bcolors.FAIL+str(e)+bcolors.ENDC)
 
 	else:
 		ap.print_help()
