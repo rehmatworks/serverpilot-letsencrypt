@@ -144,6 +144,7 @@ def get_app_info(conf_file):
 		try:
 			domainsraw = search('server_name', data).split() # All app domains
 			if domainsraw:
+				print('Reached')
 				domains = rwssl_clean_domains(domainsraw)
 			else:
 				domains = None
