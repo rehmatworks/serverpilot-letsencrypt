@@ -82,6 +82,7 @@ def get_first_domain(domains):
 
 def certbot_command(root, domains, path):
 	domainsstr = ''
+	print(bcolors.HEADER+domains.len+' valid domains found for the app'+bcolors.ENDC)
 	for domain in domains:
 		domainsstr += ' -d '+domain		
 	if domainsstr:
