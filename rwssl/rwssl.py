@@ -69,15 +69,15 @@ def rwssl_clean_domains(domains):
 	url = re.compile(r"https?://(www\.)?")
 	# Clean domains
 	for domain in domains:
-		domainsarr.append(url.sub('', domain).strip().strip('/'))
+		cleaneddomain = url.sub('', domain).strip().strip('/');
+		if validators.domain(cleaneddomain):
+			domainsarr.append(validdomain)
 	return domainsarr
 
-def get_first_valid_domain(domains):
+def get_first_domain(domains):
 	# Find first valid domain
-	for domain in domains:
-		if validators.domain(domain):
-			return domain
-			break
+	if isinstance(domains, list):
+		return domains[0]
 	return False
 
 def certbot_command(root, domains, path):
@@ -101,7 +101,6 @@ def write_conf(app):
 	username = app.get('username', 'serverpilot')
 	confname = vhostsdir + appname + '-ssl.conf'
 	domains = app.get('domains')
-	domainname = get_first_valid_domain(domains)
 	c = nginx.Conf()
 	s = nginx.Server()
 	s.add(
@@ -163,7 +162,7 @@ def get_app_info(conf_file):
 		except:
 			username = 'serverpilot'
 		if domains:
-			firstdomain = get_first_valid_domain(domains)
+			firstdomain = get_first_domain(domains)
 			if firstdomain:
 				certpath = '/etc/letsencrypt/live/'+firstdomain+'/'
 			else:
