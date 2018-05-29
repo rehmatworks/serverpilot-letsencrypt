@@ -76,6 +76,7 @@ def rwssl_clean_domains(domains):
 
 def get_first_domain(domains):
 	# Find first valid domain
+	print(domains)
 	if isinstance(domains, list):
 		return domains[0]
 	return False
