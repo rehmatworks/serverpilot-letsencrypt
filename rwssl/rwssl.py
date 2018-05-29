@@ -164,10 +164,13 @@ def get_app_info(conf_file):
 			username = 'serverpilot'
 		if domains:
 			firstdomain = get_first_valid_domain(domains)
-			certpath = '/etc/letsencrypt/live/'+firstdomain+'/'
+			if firstdomain:
+				certpath = '/etc/letsencrypt/live/'+firstdomain+'/'
+			else:
+				certpath = None
 		else:
 			certpath = None
-		if(appname and domains and root):
+		if(certpath and appname and domains and root):
 			domaininfo = {'domains': domains, 'root': root, 'appname': appname, 'username': username, 'certpath': certpath}
 	return domaininfo
 
@@ -380,7 +383,7 @@ def main():
 		if app:
 			do_final_ssl_install(app)
 		else:
-			print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
+			print(bcolors.FAIL+'Provided app name seems to be invalid or it does not have any valid domains.'+bcolors.ENDC)
 	elif args.ignoreapps:
 		apps = apps()
 		ignoreapps = args.ignoreapps.split(',')
@@ -426,7 +429,7 @@ def main():
 				else:
 					print(bcolors.FAIL+'SSL is not installed for this app yet so redirect cannot be enabled.'+bcolors.ENDC)
 			else:
-				print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
+				print(bcolors.FAIL+'Provided app name seems to be invalid or it does not have any valid domains.'+bcolors.ENDC)
 	elif args.noredirect:
 		if args.noredirect == 'all':
 			apps = apps()
@@ -438,7 +441,7 @@ def main():
 			if app:
 				disable_force_ssl(app)
 			else:
-				print(bcolors.FAIL+'Provided app name seems to be invalid as we did not find any vhost files for it.'+bcolors.ENDC)
+				print(bcolors.FAIL+'Provided app name seems to be invalid or it does not have any valid domains.'+bcolors.ENDC)
 
 	else:
 		ap.print_help()
