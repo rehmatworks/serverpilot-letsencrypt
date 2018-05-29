@@ -58,8 +58,8 @@ def apps():
 				try:
 					appinfo = get_app_info(conf_file)
 					spapps.append(appinfo)
-				except:
-					# This app is invalid, so ignore
+				except ValueError as e:
+					pass
 	if(len(spapps) > 0):
 		print(bcolors.OKBLUE+str(len(spapps))+' apps found in total. Proceeding further...'+bcolors.ENDC)
 	else:
@@ -284,7 +284,7 @@ def refresh_ssl_apps():
 					print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
 					os.unlink(conf)
 				except:
-					# Silence
+					pass
 		if(len(sslapps) > 0):
 			print(bcolors.OKBLUE+'Refreshing SSL certificates for '+str(len(sslapps))+' apps. Obsolete vhosts will be cleaned.'+bcolors.ENDC)
 			for app in sslapps:
