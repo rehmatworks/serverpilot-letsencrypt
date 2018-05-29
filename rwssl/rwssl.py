@@ -161,8 +161,6 @@ def get_app_info(conf_file):
 			username = find_between(root, 'users/', '/')
 		except:
 			username = 'serverpilot'
-		print(domains)
-		sys.exit()
 		if domains:
 			firstdomain = get_first_domain(domains)
 			if firstdomain:
