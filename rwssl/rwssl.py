@@ -55,9 +55,11 @@ def apps():
 	if conf_files:
 		for conf_file in conf_files:
 			if '-ssl.conf' not in conf_file:
-				appinfo = get_app_info(conf_file)
-				if(appinfo):
+				try:
+					appinfo = get_app_info(conf_file)
 					spapps.append(appinfo)
+				except:
+					# This app is invalid, so ignore
 	if(len(spapps) > 0):
 		print(bcolors.OKBLUE+str(len(spapps))+' apps found in total. Proceeding further...'+bcolors.ENDC)
 	else:
@@ -140,20 +142,20 @@ def get_app_info(conf_file):
 		data = c.get('conf')[-1:]
 		try:
 			domainsraw = search('server_name', data).split() # All app domains
-			if domainsraw:
+			if isinstance(domainsraw, list):
 				domains = rwssl_clean_domains(domainsraw)
 			else:
-				domains = None
+				raise ValueError('No valid domains found in vhost file.')
 		except:
-			domains = None
+			raise ValueError('No valid domains found in vhost file.')
 		try:
 			root = search('root', data)
 		except:
-			root = None
+			raise ValueError('Root directory cannot be parsed. Probably a broken vhost file is there.')
 		try:
 			appname = find_between(root, 'apps/', '/')
 		except:
-			appname = None
+			raise ValueError('App name cannot be parsed. Probably a broken vhost file is there.')
 		try:
 			username = find_between(root, 'users/', '/')
 		except:
@@ -163,9 +165,9 @@ def get_app_info(conf_file):
 			if firstdomain:
 				certpath = '/etc/letsencrypt/live/'+firstdomain+'/'
 			else:
-				certpath = None
+				raise ValueError('No valid domain names found.')
 		else:
-			certpath = None
+			raise ValueError('No valid domain names found.')
 		if(certpath and appname and domains and root):
 			domaininfo = {'domains': domains, 'root': root, 'appname': appname, 'username': username, 'certpath': certpath}
 	return domaininfo
@@ -276,11 +278,13 @@ def refresh_ssl_apps():
 	if confs:
 		for conf in confs:
 			if 'ssl.conf' in conf:
-				appinfo = get_app_info(conf)
-				if appinfo:
+				try:
+					appinfo = get_app_info(conf)
 					sslapps.append(appinfo)
-				print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
-				os.unlink(conf)
+					print(bcolors.FAIL+'Deleting SSL vhost '+conf+bcolors.ENDC)
+					os.unlink(conf)
+				except:
+					# Silence
 		if(len(sslapps) > 0):
 			print(bcolors.OKBLUE+'Refreshing SSL certificates for '+str(len(sslapps))+' apps. Obsolete vhosts will be cleaned.'+bcolors.ENDC)
 			for app in sslapps:
@@ -375,11 +379,11 @@ def main():
 
 	elif args.appname:
 		vhostfile = get_app_vhost(args.appname)
-		app = get_app_info(vhostfile)
-		if app:
+		try:
+			app = get_app_info(vhostfile)
 			do_final_ssl_install(app)
-		else:
-			print(bcolors.FAIL+'Provided app name seems to be invalid or it does not have any valid domains.'+bcolors.ENDC)
+		except ValueError as e:
+			print(bcolors.FAIL+e+bcolors.ENDC)
 	elif args.ignoreapps:
 		apps = apps()
 		ignoreapps = args.ignoreapps.split(',')
@@ -418,14 +422,14 @@ def main():
 					force_ssl(app)
 		else:
 			vhostfile = get_app_vhost(args.redirect)
-			app = get_app_info(vhostfile)
-			if app:
+			try:
+				app = get_app_info(vhostfile)
 				if ssl_installed(app):
 					force_ssl(app)
 				else:
 					print(bcolors.FAIL+'SSL is not installed for this app yet so redirect cannot be enabled.'+bcolors.ENDC)
-			else:
-				print(bcolors.FAIL+'Provided app name seems to be invalid or it does not have any valid domains.'+bcolors.ENDC)
+			except ValueError as e:
+				print(bcolors.FAIL+e+bcolors.ENDC)
 	elif args.noredirect:
 		if args.noredirect == 'all':
 			apps = apps()
@@ -433,11 +437,11 @@ def main():
 				disable_force_ssl(app)
 		else:
 			vhostfile = get_app_vhost(args.noredirect)
-			app = get_app_info(vhostfile)
-			if app:
+			try:
+				app = get_app_info(vhostfile)
 				disable_force_ssl(app)
-			else:
-				print(bcolors.FAIL+'Provided app name seems to be invalid or it does not have any valid domains.'+bcolors.ENDC)
+			except ValueError as e:
+				print(bcolors.FAIL+e+bcolors.ENDC)
 
 	else:
 		ap.print_help()
