@@ -71,7 +71,7 @@ def rwssl_clean_domains(domains):
 	for domain in domains:
 		cleaneddomain = url.sub('', domain).strip().strip('/');
 		if validators.domain(cleaneddomain):
-			domainsarr.append(validdomain)
+			domainsarr.append(cleaneddomain)
 	return domainsarr
 
 def get_first_domain(domains):
@@ -144,7 +144,6 @@ def get_app_info(conf_file):
 		try:
 			domainsraw = search('server_name', data).split() # All app domains
 			if domainsraw:
-				print('Reached')
 				domains = rwssl_clean_domains(domainsraw)
 			else:
 				domains = None
