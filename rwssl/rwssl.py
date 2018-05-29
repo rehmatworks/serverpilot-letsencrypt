@@ -81,13 +81,16 @@ def get_first_valid_domain(domains):
 	return False
 
 def certbot_command(root, domains, path):
-	domainsstr = ''
+	domainsstr = None
 	for domain in domains:
 		# Only adding valid domains
 		if validators.domain(domain):
 			domainsstr += ' -d '+domain
-	cmd = "certbot certonly --webroot -w "+root+" --cert-path "+path+" --key-path "+path+" --fullchain-path "+path+" --chain-path "+path+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
-	return cmd
+	if domainsstr:
+		cmd = "certbot certonly --webroot -w "+root+" --cert-path "+path+" --key-path "+path+" --fullchain-path "+path+" --chain-path "+path+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
+		return cmd
+	else:
+		return False
 
 def write_conf(app):
 	print(bcolors.OKBLUE+'Writing NGINX vhost file for the app '+bcolors.BOLD+app.get('appname')+bcolors.ENDC)
@@ -198,16 +201,19 @@ def get_ssl(app):
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
 		cmd = certbot_command(app.get('root'), domains, app.get('certpath'))
-		cboutput = commands.getstatusoutput(cmd)[1]
-		if 'Congratulations' in cboutput:
-			print(bcolors.OKGREEN+'SSL certificate has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
-			return True
-		elif 'Failed authorization procedure' in cboutput:
-			print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server.'+bcolors.ENDC)
-		elif 'too many requests' in cboutput:
-			print(bcolors.FAIL+'SSL certificates limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
-		else:
-			print(bcolors.FAIL+'Something went wrong. SSL certificate cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
+		if cmd:
+			cboutput = commands.getstatusoutput(cmd)[1]
+			if 'Congratulations' in cboutput:
+				print(bcolors.OKGREEN+'SSL certificate has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
+				return True
+			elif 'Failed authorization procedure' in cboutput:
+				print(bcolors.FAIL+'DNS check failed. Please ensure that the domain(s) '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC+bcolors.FAIL+' are resolving to your server.'+bcolors.ENDC)
+			elif 'too many requests' in cboutput:
+				print(bcolors.FAIL+'SSL certificates limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
+			else:
+				print(bcolors.FAIL+'Something went wrong. SSL certificate cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
+		else:	
+			print(bcolors.FAIL+'rwssl cannot find any valid domains belonging to this app.'+bcolors.ENDC)
 	else:
 		print(bcolors.FAIL+'Provided path of the app seems to be invalid.'+bcolors.ENDC)
 		exit
