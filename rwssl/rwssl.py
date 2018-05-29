@@ -81,7 +81,7 @@ def get_first_valid_domain(domains):
 	return False
 
 def certbot_command(root, domains, path):
-	domainsstr = None
+	domainsstr = ''
 	for domain in domains:
 		# Only adding valid domains
 		if validators.domain(domain):
