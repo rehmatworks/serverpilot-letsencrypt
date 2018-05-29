@@ -170,7 +170,10 @@ def get_app_info(conf_file):
 			raise ValueError('No valid domain names found.')
 		if(certpath and appname and domains and root):
 			domaininfo = {'domains': domains, 'root': root, 'appname': appname, 'username': username, 'certpath': certpath}
-	return domaininfo
+	if domaininfo:
+		return domaininfo
+	else:
+		raise ValueError('The app name seems to be invalid.')
 
 def install_sp_cron():
 	if(os.path.exists(cronfile)):
