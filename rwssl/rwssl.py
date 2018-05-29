@@ -4,6 +4,9 @@ import glob, os, sys
 import nginx
 import commands
 import argparse
+import validators
+import re
+
 # ServerPilot vhosts directory
 vhostsdir = '/etc/nginx-sp/vhosts.d/'
 # Cron file of rwssl renewal
@@ -61,11 +64,29 @@ def apps():
 		print(bcolors.FAIL+'No apps found. Ensure that you have created some apps already.'+bcolors.ENDC)
 	return spapps
 
-def certbot_command(root, domains):
+def rwssl_clean_domains(domains):
+	domainsarr = []
+	url = re.compile(r"https?://(www\.)?")
+	# Clean domains
+	for domain in domains:
+		domainsarr.append(url.sub('', domain).strip().strip('/'))
+	return domainsarr
+
+def get_first_valid_domain(domains):
+	# Find first valid domain
+	for domain in domains:
+		if validators.domain(domain):
+			return domain
+			break
+	return False
+
+def certbot_command(root, domains, path):
 	domainsstr = ''
 	for domain in domains:
-		domainsstr += ' -d '+domain
-	cmd = "certbot certonly --webroot -w "+root+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
+		# Only adding valid domains
+		if validators.domain(domain):
+			domainsstr += ' -d '+domain
+	cmd = "certbot certonly --webroot -w "+root+" --cert-path "+path+" --key-path "+path+" --fullchain-path "+path+" --chain-path "+path+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
 	return cmd
 
 def write_conf(app):
@@ -75,6 +96,7 @@ def write_conf(app):
 	username = app.get('username', 'serverpilot')
 	confname = vhostsdir + appname + '-ssl.conf'
 	domains = app.get('domains')
+	domainname = get_first_valid_domain(domains)
 	c = nginx.Conf()
 	s = nginx.Server()
 	s.add(
@@ -83,8 +105,8 @@ def write_conf(app):
 		nginx.Key('listen', '[::]:443 ssl http2'),
 		nginx.Key('server_name', ' '.join(domains)),
 		nginx.Key('ssl', 'on'),
-		nginx.Key('ssl_certificate', '/etc/letsencrypt/live/'+domains[0]+'/fullchain.pem'),
-		nginx.Key('ssl_certificate_key', '/etc/letsencrypt/live/'+domains[0]+'/privkey.pem'),
+		nginx.Key('ssl_certificate', app.get('certpath')+'/fullchain.pem'),
+		nginx.Key('ssl_certificate_key', app.get('certpath')+'/privkey.pem'),
 		nginx.Key('root', root),
 		nginx.Key('access_log', '/srv/users/'+username+'/log/'+appname+'/dev_nginx.access.log main'),
 		nginx.Key('error_log', '/srv/users/'+username+'/log/'+appname+'/dev_nginx.error.log'),
@@ -116,7 +138,11 @@ def get_app_info(conf_file):
 		c = nginx.loadf(conf_file).as_dict
 		data = c.get('conf')[-1:]
 		try:
-			domains = search('server_name', data).split() # All app domains
+			domainsraw = search('server_name', data).split() # All app domains
+			if isinstance(domainsraw, list):
+				domains = rwssl_clean_domains(domainsraw)
+			else:
+				domains = None
 		except:
 			domains = None
 		try:
@@ -131,8 +157,13 @@ def get_app_info(conf_file):
 			username = find_between(root, 'users/', '/')
 		except:
 			username = 'serverpilot'
+		if domains:
+			firstdomain = get_first_valid_domain(domains)
+			certpath = '/etc/letsencrypt/live/'+firstdomain+'/'
+		else:
+			certpath = None
 		if(appname and domains and root):
-			domaininfo = {'domains': domains, 'root': root, 'appname': appname, 'username': username}
+			domaininfo = {'domains': domains, 'root': root, 'appname': appname, 'username': username, 'certpath': certpath}
 	return domaininfo
 
 def install_sp_cron():
@@ -166,7 +197,7 @@ def get_ssl(app):
 	print(bcolors.OKBLUE+'Obtaining SSL certificate for the app '+bcolors.BOLD+app.get('appname')+'.'+bcolors.ENDC)
 	if(os.path.isdir(app.get('root'))):
 		domains = app.get('domains')
-		cmd = certbot_command(app.get('root'), domains)
+		cmd = certbot_command(app.get('root'), domains, app.get('certpath'))
 		cboutput = commands.getstatusoutput(cmd)[1]
 		if 'Congratulations' in cboutput:
 			print(bcolors.OKGREEN+'SSL certificate has been successfully obtained for '+' '.join(domains)+bcolors.ENDC)
