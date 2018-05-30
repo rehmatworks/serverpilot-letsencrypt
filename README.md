@@ -8,7 +8,7 @@ In order to get SSL renewals work flawlessly, all versions prior to v1.0.3 need 
 ```bash
 pip show rwssl
 ```
-If the version is older than 1.0.3, then you need to upgrade it:
+If the version is older than 1.0.5, then you need to upgrade it:
 ```bash
 pip uninstall rwssl
 pip install --no-cache-dir rwssl
