@@ -1,0 +1,11 @@
+README.md
+setup.py
+rwssl/__init__.py
+rwssl/__main__.py
+rwssl/rwssl.py
+rwssl.egg-info/PKG-INFO
+rwssl.egg-info/SOURCES.txt
+rwssl.egg-info/dependency_links.txt
+rwssl.egg-info/entry_points.txt
+rwssl.egg-info/requires.txt
+rwssl.egg-info/top_level.txt
