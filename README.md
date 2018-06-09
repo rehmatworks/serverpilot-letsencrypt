@@ -17,7 +17,7 @@ pip install --no-cache-dir rwssl
 ## Getting started
 
 ### Available Commands
-```bash
+```
   -h, --help            show this help message and exit
   -a, --all             Install SSL for all available apps.
   -f, --fresh           Obtain and install SSL certificates for new (non-ssl)
