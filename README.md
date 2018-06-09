@@ -16,7 +16,20 @@ pip install --no-cache-dir rwssl
 
 ## Getting started
 
-### Available Commands
+#### Install 
+```bash
+pip install rwssl
+```
+PIP not installed? Install it by running:
+```bash
+apt install python-pip
+```
+
+If all goes fine, a new command `rwssl` will become available.
+
+Below commands can be used with `rwssl`:
+
+#### Available Commands
 ```
   -h, --help            show this help message and exit
   -a, --all             Install SSL for all available apps.
@@ -45,18 +58,6 @@ pip install --no-cache-dir rwssl
                         Disable HTTP to HTTPs redirect for a single app or for
                         all apps.
 ```
-
-
-#### Install 
-```bash
-pip install rwssl
-```
-PIP not installed? Install it by running:
-```bash
-apt install python-pip
-```
-
-If all goes fine, a new command `rwssl` will become available.
 
 ### Get Help on All Available Commands
 ```bash
