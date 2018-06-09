@@ -16,6 +16,37 @@ pip install --no-cache-dir rwssl
 
 ## Getting started
 
+### Available Commands
+```bash
+  -h, --help            show this help message and exit
+  -a, --all             Install SSL for all available apps.
+  -f, --fresh           Obtain and install SSL certificates for new (non-ssl)
+                        apps only.
+  -i IGNOREAPPS, --ignore IGNOREAPPS
+                        Comma-seperated app names to ignore some apps and
+                        install SSL for all others.
+  -n APPNAME, --name APPNAME
+                        Name of the app where SSL should be installed.
+  -r, --renew           Renew all installed SSL certificates which are about
+                        to expire.
+  -ic, --installcron    Install the cron job for SSL renewals.
+  -dc, --deletecron     Uninstall the cron job responsible for SSL renewals.
+  -ap, --autopilot      A CRON job that attempts to automatically obtain SSL
+                        certificates for newly added apps.
+  -na, --noautopilot    Disable Autopilot mode and disable automatic SSLs for
+                        your apps.
+  -re, --refresh        Cleans all previous SSL vhost files, reinstalls the
+                        SSLs and reloads nginx. Only needed if you are having
+                        issues on a server with old SSL installations.
+  -redir REDIRECT, --redirect REDIRECT
+                        Apply a 301 redirect from HTTP to HTTPs for a given
+                        app or for all apps.
+  -noredir NOREDIRECT, --noredirect NOREDIRECT
+                        Disable HTTP to HTTPs redirect for a single app or for
+                        all apps.
+```
+
+
 #### Install 
 ```bash
 pip install rwssl
