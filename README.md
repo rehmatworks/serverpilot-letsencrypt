@@ -1,3 +1,5 @@
+<a href="https://www.buymeacoffee.com/Z0Mitv3HA" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
 # Let's Encrypt on Your ServerPilot Servers
 Automate the installation of Let's Encrypt SSL on servers managed by ServerPilot. Both free and paid plans of ServerPilot are supported now. SSLs can be installed on all apps owned by serverpilot or any other user.
 
@@ -243,6 +245,3 @@ To unintall `rwssl`, simply run:
 ```bash
 sudo pip uninstall rwssl
 ```
-
-### Support Me
-If you have found my work useful, then consider ordering your next Digital Ocean server using my [referral link](https://m.do.co/c/5778718c4f2e). Signing up using this link will give you $10 as well as it will earn me $25 credit. I will use the earned credit to deploy servers involved in my open-source projects' testing. 
