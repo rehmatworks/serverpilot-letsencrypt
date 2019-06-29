@@ -86,7 +86,7 @@ def certbot_command(root, domains, path):
 	domainsstr = ''
 	print(bcolors.HEADER+str(len(domains))+' valid domains found for the app'+bcolors.ENDC)
 	for domain in domains:
-		domainsstr += ' -d '+domain		
+		domainsstr += ' -d '+domain
 	if domainsstr:
 		cmd = "certbot certonly --webroot -w "+root+" --cert-path "+path+" --key-path "+path+" --fullchain-path "+path+" --chain-path "+path+" --register-unsafely-without-email --agree-tos --force-renewal"+domainsstr
 		return cmd
@@ -107,7 +107,6 @@ def write_conf(app):
 		nginx.Key('listen', '443 ssl http2'),
 		nginx.Key('listen', '[::]:443 ssl http2'),
 		nginx.Key('server_name', ' '.join(domains)),
-		nginx.Key('ssl', 'on'),
 		nginx.Key('ssl_certificate', app.get('certpath')+'/fullchain.pem'),
 		nginx.Key('ssl_certificate_key', app.get('certpath')+'/privkey.pem'),
 		nginx.Key('root', root),
@@ -218,7 +217,7 @@ def get_ssl(app):
 				print(bcolors.FAIL+'SSL certificates limit reached for '+' '.join(domains)+'. Please wait before obtaining another SSL.'+bcolors.ENDC)
 			else:
 				print(bcolors.FAIL+'Something went wrong. SSL certificate cannot be installed for '+bcolors.BOLD+' '.join(domains)+bcolors.ENDC)
-		else:	
+		else:
 			print(bcolors.FAIL+'rwssl cannot find any valid domains belonging to this app.'+bcolors.ENDC)
 	else:
 		print(bcolors.FAIL+'Provided path of the app seems to be invalid.'+bcolors.ENDC)
@@ -234,7 +233,7 @@ def do_initial_config():
 		commands.getstatusoutput(certbotcmd)
 		print(bcolors.OKGREEN+'Finished installing required libraries. Please re-run your previous command now.'+bcolors.ENDC)
 		sys.exit()
-		
+
 def ssl_status():
 	theapps = False
 	allapps = apps()
