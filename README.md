@@ -1,5 +1,8 @@
 <a href="https://www.buymeacoffee.com/Z0Mitv3HA" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
+## SP Suite for ServerPilot
+I've released a new package that can be used to manage a ServerPilot server over command line. You can activate SSLs, can create/delete apps and can perform several other tasks. Check [it out here](https://github.com/rehmatworks/spsuite).
+
 # Let's Encrypt on Your ServerPilot Servers
 Automate the installation of Let's Encrypt SSL on servers managed by ServerPilot. Both free and paid plans of ServerPilot are supported now. SSLs can be installed on all apps owned by serverpilot or any other user.
 
