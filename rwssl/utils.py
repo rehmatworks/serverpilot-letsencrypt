@@ -176,7 +176,6 @@ class ServerPilot:
                 runcmd(cmd)
                 validdoms.append(domain)
         except Exception as e:
-            print(str(e))
             pass
 
         if len(validdoms) > 0:
