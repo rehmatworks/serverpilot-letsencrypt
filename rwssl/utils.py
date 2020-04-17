@@ -57,9 +57,17 @@ class ServerPilot:
         return False
 
     def appdetails(self):
+        conff = os.path.join(self.nginxroot, self.vhostdir, '{}.conf'.format(self.app))
+        if not os.path.exists(conff):
+            raise Exception('Looks like you  provided a wrong app name.')
+        c = nginx.loadf(conff)
+        if len(c.filter('Server')) == 2:
+            s = c.filter('Server')[1]
+        else:
+            s = c.filter('Server')[0]
         return {
-            'domains': [],
-            'user': '',
+            'domains': list(filter(None, s.filter('Key', 'server_name')[0].as_dict.get('server_name'))),
+            'user': list(filter(None, c.filter('Server')[1].filter('Key', 'root')[0].as_dict.get('root').split('/')))[2]
         }
 
     def findapps(self):
