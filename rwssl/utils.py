@@ -80,7 +80,7 @@ class ServerPilot:
                             if self.isvalidapp():
                                 i += 1
                                 info = self.appdetails()
-                                appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains')), du(os.path.join(appsdir, self.app)), mdatef(self.appdir())])
+                                appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains'))])
         else:
             appsdir = self.appsdir()
             if not os.path.exists(appsdir):
@@ -93,7 +93,7 @@ class ServerPilot:
                     if self.isvalidapp():
                         i += 1
                         info = self.appdetails()
-                        appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains')), du(self.appdir()), mdatef(self.appdir())])
+                        appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains'))])
         return appsdata
 
     def gettpldata(self):
