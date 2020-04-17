@@ -198,7 +198,7 @@ class ServerPilot:
                     restartservice('nginx-sp')
                     raise Exception('SSL activation failed!')
         else:
-            print('SSL not available for this app yet.')
+            raise Exception('SSL not available for this app yet.')
 
     def apphasssl(self):
         return os.path.exists(os.path.join(self.sslroot, 'live', self.app, 'fullchain.pem'))
