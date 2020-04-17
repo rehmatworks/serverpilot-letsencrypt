@@ -66,8 +66,8 @@ class ServerPilot:
         else:
             s = c.filter('Server')[0]
         return {
-            'domains': list(filter(None, s.filter('Key', 'server_name')[0].as_dict.get('server_name'))),
-            'user': list(filter(None, c.filter('Server')[1].filter('Key', 'root')[0].as_dict.get('root').split('/')))[2]
+            'domains': list(filter(None, s.filter('Key', 'server_name')[0].as_dict.get('server_name').strip().split(' '))),
+            'user': list(filter(None, s.filter('Key', 'root')[0].as_dict.get('root').strip().split('/')))[2]
         }
 
     def findapps(self):
