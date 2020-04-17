@@ -6,7 +6,7 @@ from setuptools.command.install import install
 class SetupSslRenewCron(install):
 	def run(self):
 		crondir = '/etc/cron.weekly'
-		cronfile = os.path.join(crondir, 'rwssl-sslrenewals')
+		cronfile = os.path.join(crondir, 'spsuite-sslrenewals')
 		if not os.path.exists(crondir):
 			os.makedirs(crondir)
 
@@ -23,12 +23,12 @@ setup(name='rwssl',
 	description='A Python package to manage Let\'s Encrypt SSL on ServerPilot provisioned servers.',
 	author="Rehmat Alam",
 	author_email="contact@rehmat.works",
-      url="https://github.com/rehmatworks/serverpilot-letsencrypt",
+	url="https://github.com/rehmatworks/serverpilot-letsencrypt/",
 	license="MIT",
 	entry_points={
 		'console_scripts': [
 			'rwssl = rwssl.rwssl:main'
-			],``
+			],
 	},
 	packages=[
 		'rwssl'
