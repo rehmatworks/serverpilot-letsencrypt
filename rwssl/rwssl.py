@@ -6,8 +6,6 @@ from termcolor import colored
 import sys
 import validators
 from .tools import *
-from getpass import getpass
-from tabulate import tabulate
 
 def main():
 
