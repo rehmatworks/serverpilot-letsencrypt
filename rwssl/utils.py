@@ -5,6 +5,7 @@ import nginx
 import json
 import validators
 from getpass import getpass
+import socket
 
 class ServerPilot:
     def __init__(self, username = False, app = False):
@@ -173,8 +174,16 @@ class ServerPilot:
         try:
             for domain in details.get('domains'):
                 cmd = "certbot certonly --non-interactive --dry-run --webroot -w {} --register-unsafely-without-email --agree-tos -d {}".format(os.path.join(self.appdir(), 'public'), domain)
-                runcmd(cmd)
-                validdoms.append(domain)
+                try:
+                    runcmd(cmd)
+                    validdoms.append(domain)
+                except:
+                    ip = socket.socket.gethostbyname(domain)
+                    if validators.ipv4(ip):
+                        errmsg = 'SSL not available. Failing IP is {}'.format(ip)
+                    else:
+                        errmsg = 'SSL is not available for {} yet.'.format(domain)
+                    print(colored(errmsg, 'yellow'))
         except Exception as e:
             pass
 
