@@ -180,7 +180,7 @@ class ServerPilot:
                 except:
                     ip = socket.gethostbyname(domain)
                     if validators.ipv4(ip):
-                        errmsg = 'SSL not available. Failing IP is {}'.format(ip)
+                        errmsg = 'SSL not available. {}\'s failing IP is {}'.format(ip)
                     else:
                         errmsg = 'SSL is not available for {} yet.'.format(domain)
                     print(colored(errmsg, 'yellow'))
