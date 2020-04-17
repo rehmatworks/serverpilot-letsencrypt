@@ -14,18 +14,11 @@ class ServerPilot:
         self.sslroot = os.path.join(self.nginxroot, 'le-ssls')
         self.vhostdir = 'vhosts.d'
         self.username = username
-        self.php = '7.3'
         self.app = app
         self.domains = []
 
     def setuser(self, username):
         self.username = username
-
-    def setphp(self, php):
-        supported = self.availphpversions()
-        if not php in supported:
-            raise Exception('The provided PHP version {} is not available on your system.'.format(php))
-        self.php = php
 
     def setapp(self, app):
         self.app = app
@@ -58,15 +51,6 @@ class ServerPilot:
             raise Exception('App name has not been provided.')
         return os.path.join(self.nginxroot, self.vhostdir, '{}.conf'.format(self.app))
 
-    def availphpversions(self):
-        os.chdir(os.path.join(self.mainroot, 'etc'))
-        dirs = list(filter(os.path.isdir, os.listdir(os.curdir)))
-        versions = []
-        for dir in dirs:
-            if 'php' in dir and '-sp' in dir:
-                versions.append(getsubstr(dir, 'php', '-sp'))
-        return versions
-
     def isvalidapp(self):
         if self.appdetails():
             return True
@@ -90,7 +74,7 @@ class ServerPilot:
                             if self.isvalidapp():
                                 i += 1
                                 info = self.appdetails()
-                                appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains')), info.get('php'), du(os.path.join(appsdir, self.app)), mdatef(self.appdir())])
+                                appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains')), du(os.path.join(appsdir, self.app)), mdatef(self.appdir())])
         else:
             appsdir = self.appsdir()
             if not os.path.exists(appsdir):
@@ -103,7 +87,7 @@ class ServerPilot:
                     if self.isvalidapp():
                         i += 1
                         info = self.appdetails()
-                        appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains')), info.get('php'), du(self.appdir()), mdatef(self.appdir())])
+                        appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains')), du(self.appdir()), mdatef(self.appdir())])
         return appsdata
 
     def gettpldata(self):
@@ -124,7 +108,6 @@ class ServerPilot:
         return {
             'appname': self.app,
             'username': self.username,
-            'php': self.php,
             'servername': servername,
             'serveralias': serveralias
         }
