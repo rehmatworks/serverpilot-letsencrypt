@@ -5,7 +5,7 @@ dist
 downloads
 eggs
 parts
-spsuite.egg-info
+rwssl.egg-info
 lib
 lib64
 test-data
