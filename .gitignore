@@ -1,0 +1,12 @@
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+spsuite.egg-info
+lib
+lib64
+test-data
+*.pyc

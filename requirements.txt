@@ -1,0 +1,10 @@
+decorator==4.4.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
+python-nginx==1.5.3
+six==1.12.0
+spsuite==1.0.0
+tabulate==0.8.5
+termcolor==1.1.0
+validators==0.14.0
+certbot==0.39.0
