@@ -56,6 +56,9 @@ class ServerPilot:
             return True
         return False
 
+    def appdetails(self):
+        return self.app
+
     def findapps(self):
         appsdata = []
         i = 0
