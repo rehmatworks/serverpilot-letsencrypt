@@ -57,7 +57,10 @@ class ServerPilot:
         return False
 
     def appdetails(self):
-        return self.app
+        return {
+            'domains': [],
+            'user': '',
+        }
 
     def findapps(self):
         appsdata = []
