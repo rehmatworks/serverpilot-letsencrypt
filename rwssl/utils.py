@@ -178,7 +178,7 @@ class ServerPilot:
                     runcmd(cmd)
                     validdoms.append(domain)
                 except:
-                    ip = socket.socket.gethostbyname(domain)
+                    ip = socket.gethostbyname(domain)
                     if validators.ipv4(ip):
                         errmsg = 'SSL not available. Failing IP is {}'.format(ip)
                     else:
