@@ -18,31 +18,29 @@ class SetupSslRenewCron(install):
 		subprocess.check_call([maxexeccmd], shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
 		install.run(self)
 
-setup(name='spsuite',
-	version='1.0.2',
-	description='Command line utilities to manage ServerPilot provisioned servers.',
+setup(name='rwssl',
+	version='2.0.0',
+	description='A Python package to manage Let\'s Encrypt SSL on ServerPilot provisioned servers.',
 	author="Rehmat Alam",
 	author_email="contact@rehmat.works",
-	url="https://github.com/rehmatworks/spsuite",
+	url="https://github.com/rehmatworks/rwssl",
 	license="MIT",
 	entry_points={
 		'console_scripts': [
-			'spsuite = spsuite.spsuite:main'
+			'rwssl = rwssl.rwssl:main'
 			],
 	},
 	packages=[
-		'spsuite'
+		'rwssl'
 	],
 	install_requires=[
 		'python-nginx',
 		'validators',
 		'termcolor',
-		'tabulate',
 		'Jinja2',
-		'pymysql',
 		'certbot'
 	],
-	package_data={'spsuite':['templates/*.tpl']},
+	package_data={'rwssl': ['templates/*.tpl']},
 	cmdclass={
 		'install': SetupSslRenewCron
 	}
