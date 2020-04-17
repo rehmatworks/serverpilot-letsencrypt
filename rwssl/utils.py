@@ -1,5 +1,4 @@
 import os
-from tabulate import tabulate
 from .tools import *
 from termcolor import colored
 import nginx
@@ -106,13 +105,6 @@ class ServerPilot:
                         info = self.appdetails()
                         appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains')), info.get('php'), du(self.appdir()), mdatef(self.appdir())])
         return appsdata
-
-    def listapps(self):
-        appsdata = self.findapps()
-        if len(appsdata):
-            print(colored(tabulate(appsdata, headers=['#', 'App Name', 'SSH User', 'Domains', 'PHP', 'Disk Used', 'Modified']), 'green'))
-        else:
-            print(colored('Looks like you have not created any apps yet!', 'yellow'))
 
     def gettpldata(self):
         if len(self.domains) > 1:
