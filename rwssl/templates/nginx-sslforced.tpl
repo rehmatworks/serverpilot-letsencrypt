@@ -10,6 +10,9 @@ server {
     listen       80;
     listen       [::]:80;
     server_name {{ servername }}{% if serveralias %} {{ serveralias }}{% endif %};
+    location /.well-known {
+        try_files $uri $uri/ =404;
+    }
     return 301 https://$server_name$request_uri;
 }
 
