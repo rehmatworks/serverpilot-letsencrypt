@@ -26,7 +26,7 @@ And then run:
 pip3 install rwssl
 ```
 
-The alternate way to install SP Suite is cloning the repository:
+The alternate way to install **rwssl** is cloning the repository:
 
 ```bash
 git clone https://github.com/rehmatworks/serverpilot-letsencrypt && cd serverpilot-letsencrypt && python3 setup.py install
@@ -46,18 +46,18 @@ rwssl removecert --app foo
 ```
 
 ## All Available Commands
-Once SP Suite is installed, a command `spsuite` will become available in your terminal. You will have access to the following sub-commands in order to manage your server.
+Once **rwssl** is installed, a command `rwssl` will become available in your terminal. You will have access to the following sub-commands in order to manage your server.
 
-| Sub-command | Details |
+| Sub-command | Details | Examples |
 | ------- | --- |
-| getcert | Get letsencrypt cert for an app. |
-| getcerts | Get letsencrypt certs for all apps. |
-| removecert | Uninstall SSL cert from an app. |
-| removecerts | Uninstall SSL certs for all apps. |
-| forcessl | Force SSL certificate for an app. |
-| unforcessl | Unforce SSL certificate for an app. |
-| forceall | Force HTTPs for all apps. |
-| unforceall | Unforce HTTPs for all apps. |
+| getcert | Get letsencrypt cert for an app. | `rwssl getcert --app foo` |
+| getcerts | Get letsencrypt certs for all apps. | `rwssl getcerts` for all users apps or `rwssl getcerts --user john` for john's apps |
+| removecert | Uninstall SSL cert from an app. | `rwssl removecert --app foo` |
+| removecerts | Uninstall SSL certs for all apps. | `rwssl removecerts` for all users apps or `rwssl removecerts --user john` for john's apps |
+| forcessl | Force SSL certificate for an app. | `rwssl forcessl --app foo` |
+| unforcessl | Unforce SSL certificate for an app. | `rwssl unforcessl --app foo` |
+| forceall | Force HTTPs for all apps. | `rwssl forceall` for all users apps or `rwssl forceall --user john` for john's apps |
+| unforceall | Unforce HTTPs for all apps. | `rwssl unforceall` for all users apps or `rwssl unforceall --user john` for john's apps |
 
 You can use `rwssl -h` command to get to the help page on above commands.
 
