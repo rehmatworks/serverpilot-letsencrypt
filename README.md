@@ -37,6 +37,8 @@ Only Python 3.5 and up supported so you shoul install & use rwssl package using 
 
 Once **rwssl** is installed, a command `rwssl` will become available in your terminal. You will have access to the following sub-commands in order to manage your server.
 
+**Update:** Please note that old commands aren't available anymore due to a recent major upgrade. Please check below table for new commands that come with rwssl. You can get help by typing `rwssl -h` as well.
+
 | Command | Details | Examples |
 | ------- | --- | -- |
 | getcert | Get letsencrypt cert for an app. | `rwssl getcert --app foo` |
