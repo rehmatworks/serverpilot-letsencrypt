@@ -6,8 +6,9 @@
 # Email: contact@rehmat.works
 #
 # This file rewrites ACME root in order to prevent issues during ACME challenge
-# verification & later in renewal process. HTACCESS rules may interfere with
-# ACME requests and may result in renewal failure. This conf file prevents that.
+# verification & later in renewal process. HTACCESS or NGINX rules may interfere
+# with ACME requests and may result in renewal failure. This conf file prevents
+# from happening.
 ###############################################################################
 
 location ^~ /.well-known/acme-challenge/ {

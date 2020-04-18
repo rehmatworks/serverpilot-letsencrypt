@@ -210,7 +210,6 @@ class ServerPilot:
                             domain)
                     print(colored(errmsg, 'yellow'))
         except Exception as e:
-            print(str(e))
             pass
 
         if len(validdoms) > 0:
@@ -223,7 +222,7 @@ class ServerPilot:
             runcmd(cmd)
             self.createnginxsslvhost()
             try:
-                # For backward compatibility, clean old SSL-vhost if exists
+                # For backward compatibility, clean old SSL-vhost if
                 oldsslconf = os.path.join(
                     self.nginxroot, self.vhostdir, '{}-ssl.conf'.format(self.app))
                 if os.path.exists(oldsslconf):
