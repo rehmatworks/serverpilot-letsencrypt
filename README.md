@@ -11,7 +11,8 @@ Donations always remind me that my program is needed and appreciated by the comm
 Sign in as root user (or with sudo privileges) and install some needed packages:
 
 ```bash
-sudo apt-get update && apt-get -y install python3-pip build-essential libssl-dev libffi-dev python3-dev
+sudo apt-get update  && \
+apt-get -y install python3-pip build-essential libssl-dev libffi-dev python3-dev
 ```
 
 And then install the package from PyPi:
@@ -23,8 +24,9 @@ pip3 install --upgrade --force-reinstall rwssl
 The alternate way to install **rwssl** is by cloning the repository:
 
 ```bash
-git clone https://github.com/rehmatworks/serverpilot-letsencrypt && cd serverpilot-letsencrypt
-pip3 install -r requirements.txt
+git clone https://github.com/rehmatworks/serverpilot-letsencrypt  && \
+cd serverpilot-letsencrypt && \
+pip3 install -r requirements.txt && \
 python3 setup.py install
 ```
 
