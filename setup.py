@@ -6,7 +6,7 @@ from setuptools.command.install import install
 class SetupSslRenewCron(install):
 	def run(self):
 		crondir = '/etc/cron.weekly'
-		cronfile = os.path.join(crondir, 'spsuite-sslrenewals')
+		cronfile = os.path.join(crondir, 'rwssl-sslrenewals')
 		if not os.path.exists(crondir):
 			os.makedirs(crondir)
 
