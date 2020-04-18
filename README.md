@@ -31,7 +31,7 @@ pip3 install -r requirements.txt && \
 python3 setup.py install
 ```
 
-**Only Python 3.5 and up supported.**
+Only Python 3.5 and up supported so you shoul install & use rwssl package using pip3 and Python 3.x.
 
 ## Available Commands with Examples:
 
