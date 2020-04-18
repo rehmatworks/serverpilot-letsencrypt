@@ -3,6 +3,7 @@ import os
 import subprocess
 from setuptools.command.install import install
 import shutil
+import sys
 
 class SetupSslRenewCron(install):
 	def run(self):
@@ -10,7 +11,12 @@ class SetupSslRenewCron(install):
 		cronfile = os.path.join(crondir, 'rwssl-sslrenewals')
 		if not os.path.exists(crondir):
 			os.makedirs(crondir)
-		cmd = '%s renew --non-interactive --config-dir /etc/nginx-sp/le-ssls --post-hook "service nginx-sp reload"\n' % shutil.which('certbot')
+		try:
+			cmd = '%s renew --non-interactive --config-dir /etc/nginx-sp/le-ssls --post-hook "service nginx-sp reload"\n' % shutil.which('certbot')
+		except:
+			# which() on shutil module is not available under Python 3.x
+			sys.exit('Looks like you are running an older version of Python. Only Python 3.x is supported.')
+
 		with open(cronfile, 'w') as cf:
 			cf.writelines(['#!/bin/sh\n', cmd])
 		maxexeccmd = "chmod +x {}".format(cronfile)
