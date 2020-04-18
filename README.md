@@ -6,7 +6,7 @@ Donations always remind me that my program is needed and appreciated by the comm
 
 ## Getting Started
 
-** If you are using my VERY old bash script, you will have to delete it completely first from `/usr/local/bin/rwssl`. **
+**If you are using my VERY old bash script, you will have to delete it completely first from `/usr/local/bin/rwssl`.**
 
 Sign in as root user (or with sudo privileges) and install some needed packages:
 
