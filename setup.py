@@ -4,11 +4,6 @@ import subprocess
 from setuptools.command.install import install
 import shutil
 
-import sys
-
-if sys.version_info < (3, 5):
-	sys.exit('Error: rwssl only works in Python 3.x.')
-
 class SetupSslRenewCron(install):
 	def run(self):
 		crondir = '/etc/cron.weekly'
@@ -26,10 +21,11 @@ class SetupSslRenewCron(install):
 setup(name='rwssl',
 	version='2.0.0',
 	description='A Python package to manage Let\'s Encrypt SSL on ServerPilot provisioned servers.',
-	author="Rehmat Alam",
-	author_email="contact@rehmat.works",
-	url="https://github.com/rehmatworks/serverpilot-letsencrypt/",
-	license="MIT",
+	author='Rehmat Alam',
+	author_email='contact@rehmat.works',
+	url='https://github.com/rehmatworks/serverpilot-letsencrypt/',
+	license='MIT',
+	python_requires='>3.5.2',
 	entry_points={
 		'console_scripts': [
 			'rwssl = rwssl.rwssl:main'
