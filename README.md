@@ -1,4 +1,4 @@
-![serverpilot-letsencrypt](https://raw.githubusercontent.com/rehmatworks/serverpilot-letsencrypt/master/rwssl.png "ServerPilto Let's Encrypt")
+![serverpilot-letsencrypt](https://raw.githubusercontent.com/rehmatworks/serverpilot-letsencrypt/master/rwssl.png "ServerPilto Let's Encrypt")(javascript:void(0))
 
 # ServerPilot Let's Encrypt (`rwssl`) v2.x
 This Python utility allows you to automate the installation/uninstallation of SSL certificates from Let's Encrypt on ServerPilot servers. Both free servers (from old grand-fathered plan) and servers on premium plans are supported.
