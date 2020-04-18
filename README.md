@@ -49,7 +49,7 @@ rwssl removecert --app foo
 Once **rwssl** is installed, a command `rwssl` will become available in your terminal. You will have access to the following sub-commands in order to manage your server.
 
 | Sub-command | Details | Examples |
-| ------- | --- |
+| ------- | --- | -- |
 | getcert | Get letsencrypt cert for an app. | `rwssl getcert --app foo` |
 | getcerts | Get letsencrypt certs for all apps. | `rwssl getcerts` for all users apps or `rwssl getcerts --user john` for john's apps |
 | removecert | Uninstall SSL cert from an app. | `rwssl removecert --app foo` |
