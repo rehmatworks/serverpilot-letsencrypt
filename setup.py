@@ -4,6 +4,11 @@ import subprocess
 from setuptools.command.install import install
 import shutil
 
+import sys
+
+sys.version_info < (3, 5)
+	sys.exit('Error: rwssl only works in Python 3.x but you are using an older version')
+
 class SetupSslRenewCron(install):
 	def run(self):
 		crondir = '/etc/cron.weekly'
