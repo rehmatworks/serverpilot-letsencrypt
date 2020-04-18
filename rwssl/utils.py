@@ -7,14 +7,16 @@ import validators
 from getpass import getpass
 import socket
 
+
 class ServerPilot:
-    def __init__(self, username = False, app = False):
+    def __init__(self, username=False, app=False):
         self.mainroot = '/'
         self.usrdataroot = os.path.join(self.mainroot, 'srv', 'users')
         self.nginxroot = os.path.join(self.mainroot, 'etc', 'nginx-sp')
         self.sslroot = os.path.join(self.nginxroot, 'le-ssls')
         self.vhostdir = 'vhosts.d'
         self.leroot = '/var/.rwssl/'
+        self.acmeconf = 'acme.conf'
         self.username = username
         self.app = app
         self.domains = []
@@ -33,7 +35,8 @@ class ServerPilot:
             else:
                 raise Exception('{} is not a valid domain.'.format(dom))
         if len(self.domains) == 0:
-            raise Exception('You need to provide at least one valid domain name.')
+            raise Exception(
+                'You need to provide at least one valid domain name.')
 
     def usrhome(self):
         if not self.username:
@@ -59,7 +62,8 @@ class ServerPilot:
         return False
 
     def appdetails(self):
-        conff = os.path.join(self.nginxroot, self.vhostdir, '{}.conf'.format(self.app))
+        conff = os.path.join(self.nginxroot, self.vhostdir,
+                             '{}.conf'.format(self.app))
         if not os.path.exists(conff):
             raise Exception('Looks like you  provided a wrong app name.')
         c = nginx.loadf(conff)
@@ -84,17 +88,20 @@ class ServerPilot:
                     appsdir = self.appsdir()
                     if os.path.exists(appsdir):
                         os.chdir(appsdir)
-                        apps = list(filter(os.path.isdir, os.listdir(os.curdir)))
+                        apps = list(
+                            filter(os.path.isdir, os.listdir(os.curdir)))
                         for app in apps:
                             self.app = app
                             if self.isvalidapp():
                                 i += 1
                                 info = self.appdetails()
-                                appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains'))])
+                                appsdata.append([i, self.app, info.get(
+                                    'user'), ','.join(info.get('domains'))])
         else:
             appsdir = self.appsdir()
             if not os.path.exists(appsdir):
-                raise Exception('Looks like you have provided an invalid SSH user.')
+                raise Exception(
+                    'Looks like you have provided an invalid SSH user.')
             else:
                 os.chdir(appsdir)
                 apps = list(filter(os.path.isdir, os.listdir(os.curdir)))
@@ -103,7 +110,8 @@ class ServerPilot:
                     if self.isvalidapp():
                         i += 1
                         info = self.appdetails()
-                        appsdata.append([i, self.app, info.get('user'), ','.join(info.get('domains'))])
+                        appsdata.append([i, self.app, info.get(
+                            'user'), ','.join(info.get('domains'))])
         return appsdata
 
     def gettpldata(self):
@@ -169,32 +177,37 @@ class ServerPilot:
 
         if not os.path.exists(self.leroot):
             os.makedirs(self.leroot)
-        
-        letpl = os.path.join(self.nginxroot, self.vhostdir, '{}.d'.format(self.app), 'rwssl.conf')
+
+        letpl = os.path.join(self.nginxroot, self.vhostdir,
+                             '{}.d'.format(self.app), self.acmeconf)
         if not os.path.exists(letpl):
             tpldata = parsetpl('leroot.tpl', data={'leroot': self.leroot})
             with open(letpl, 'w') as letplf:
                 letplf.write(tpldata)
                 reloadservice('nginx-sp')
-        
+
         with open(self.appnginxconf()) as nginxconf:
             nginxconfbackup = nginxconf.read()
         details = self.appdetails()
         self.setuser(details.get('user'))
         self.domains = details.get('domains')
         validdoms = []
+
         try:
             for domain in details.get('domains'):
-                cmd = "certbot certonly --non-interactive --dry-run --webroot -w {} --register-unsafely-without-email --agree-tos -d {}".format(self.leroot, domain)
+                cmd = "certbot certonly --non-interactive --dry-run --webroot -w {} --register-unsafely-without-email --agree-tos -d {}".format(
+                    self.leroot, domain)
                 try:
                     runcmd(cmd)
                     validdoms.append(domain)
                 except:
                     ip = socket.gethostbyname(domain)
                     if validators.ipv4(ip) or validators.ipv6(ip):
-                        errmsg = 'A possible DNS issue found. {}\'s failing IP is {}'.format(ip)
+                        errmsg = 'A possible DNS issue found. {}\'s failing IP is {}'.format(
+                            ip)
                     else:
-                        errmsg = 'SSL is not available for {} yet.'.format(domain)
+                        errmsg = 'SSL is not available for {} yet.'.format(
+                            domain)
                     print(colored(errmsg, 'yellow'))
         except Exception as e:
             pass
@@ -204,12 +217,19 @@ class ServerPilot:
             webroot = self.leroot
             for vd in validdoms:
                 domainsstr += ' -d {}'.format(vd)
-            cmd = "certbot certonly --non-interactive --agree-tos --register-unsafely-without-email --webroot -w {} --cert-name {} --config-dir {}{}".format(webroot, self.app, self.sslroot, domainsstr)
+            cmd = "certbot certonly --non-interactive --agree-tos --register-unsafely-without-email --webroot -w {} --cert-name {} --config-dir {}{}".format(
+                webroot, self.app, self.sslroot, domainsstr)
             runcmd(cmd)
             self.createnginxsslvhost()
             try:
+                # For backward compatibility, clean old SSL-vhost if exists
+                oldsslconf = os.path.join(
+                    self.nginxroot, self.vhostdir, '{}-ssl.conf'.format(self.app))
+                if os.path.exists(oldsslconf):
+                    os.unlink(oldsslconf)
                 reloadservice('nginx-sp')
-                print(colored('SSL activated for app {} (Domains Secured: {})'.format(self.app, ' '.join(validdoms)), 'green'))
+                print(colored('SSL activated for app {} (Domains Secured: {})'.format(
+                    self.app, ' '.join(validdoms)), 'green'))
             except:
                 try:
                     restartservice('nginx-sp')
@@ -229,12 +249,14 @@ class ServerPilot:
             raise Exception('A valid app name should be provided.')
 
         if not self.apphasssl():
-            raise Exception('The app {} does not have an active SSL certificate.'.format(self.app))
+            raise Exception(
+                'The app {} does not have an active SSL certificate.'.format(self.app))
 
         details = self.appdetails()
         self.domains = details.get('domains')
         self.setuser(details.get('user'))
-        cmd = "certbot --non-interactive revoke --config-dir {} --cert-name {}".format(self.sslroot, self.app)
+        cmd = "certbot --non-interactive revoke --config-dir {} --cert-name {}".format(
+            self.sslroot, self.app)
         try:
             runcmd(cmd)
             self.createnginxvhost()
@@ -244,13 +266,15 @@ class ServerPilot:
                 restartservice('nginx-sp')
 
         except Exception as e:
-            raise Exception("SSL certificate cannot be removed: {}".format(str(e)))
+            raise Exception(
+                "SSL certificate cannot be removed: {}".format(str(e)))
 
     def forcessl(self):
         if not self.isvalidapp():
             raise Exception('A valid app name should be provided.')
         if not self.apphasssl():
-            raise Exception('The app {} does not have an active SSL certificate.'.format(self.app))
+            raise Exception(
+                'The app {} does not have an active SSL certificate.'.format(self.app))
         details = self.appdetails()
         self.setuser(details.get('user'))
         self.domains = details.get('domains')
