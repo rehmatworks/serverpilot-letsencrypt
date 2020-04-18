@@ -10,7 +10,7 @@ Donations always remind me that my program is needed and appreciated by the comm
 
 `pip3 uninstall rwssl`
 
-`pip unintall rwssl`
+`pip uninstall rwssl`
 
 And then proceed to the installation. Recommended way to install **rwssl** is via PIP.
 
