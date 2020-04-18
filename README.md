@@ -5,7 +5,13 @@ This Python utility allows you to automate the installation/uninstallation of SS
 Donations always remind me that my program is needed and appreciated by the community. You can [**buy me a coffee here**](https://buymeacoffee.com/rehmat) if you really liked my work. This helps and encourages me to dedicate time for open source projects.
 
 ## Getting Started
-Recommended way to install **rwssl** is via PIP.
+
+**If you are upgrading from an older version, first uninstall the older version completely before installing the latest version.**
+
+`pip3 uninstall rwssl`
+`pip unintall rwssl`
+
+And then proceed to the installation. Recommended way to install **rwssl** is via PIP.
 
 If PIP isn't installed on your system, you need to install it first. In addition to PIP, you need to install some other needed packages as well.
 
