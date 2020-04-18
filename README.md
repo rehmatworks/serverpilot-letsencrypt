@@ -68,7 +68,7 @@ rm /etc/cron.weekly/rwssl-sslrenewals
 
 That's all!
 
-# Changelog
+## Changelog
 
 ## [2.0.0] - 2020-04-18
 A major upgrade that addresses all reported bugs.
@@ -86,5 +86,5 @@ A major upgrade that addresses all reported bugs.
 - ACME v2 protocol support
 - Added validation after vhost files are written (and changes are reverted if errors encountered)
 
-# Bugs & Suggestions
+## Bugs & Suggestions
 For security-related issues, please email me at **contact@rehmat.works** and for common bug reports / feature requests, use the issues section.
