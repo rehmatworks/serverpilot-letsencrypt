@@ -85,4 +85,4 @@ A major upgrade that addresses all reported bugs.
 - Added validation after vhost files are written (and changes are reverted if errors encountered)
 
 # Bugs & Suggestions
-For security-related issues, please email me at **contact@rehmat.works** and for common suggestions & bug reports, use the issues section.
+For security-related issues, please email me at **contact@rehmat.works** and for common bug reports / feature requests, use the issues section.
