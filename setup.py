@@ -6,7 +6,7 @@ import shutil
 
 import sys
 
-if sys.version_info < (3, 5)
+if sys.version_info < (3, 5):
 	sys.exit('Error: rwssl only works in Python 3.x.')
 
 class SetupSslRenewCron(install):
