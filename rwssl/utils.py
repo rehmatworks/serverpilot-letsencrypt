@@ -210,6 +210,7 @@ class ServerPilot:
                             domain)
                     print(colored(errmsg, 'yellow'))
         except Exception as e:
+            print(str(e))
             pass
 
         if len(validdoms) > 0:
