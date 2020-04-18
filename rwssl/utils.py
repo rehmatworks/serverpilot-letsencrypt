@@ -205,7 +205,7 @@ class ServerPilot:
                 except:
                     ip = socket.gethostbyname(domain)
                     if validators.ipv4(ip) or validators.ipv6(ip):
-                        errmsg = 'A possible DNS issue found. {}\'s failing IP is {}'.format(domain, ip)
+                        errmsg = 'A possible DNS issue found. {} may be pointing to a wrong IP ({})'.format(domain, ip)
                     else:
                         errmsg = 'SSL is not available for {} yet.'.format(
                             domain)
