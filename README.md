@@ -71,7 +71,7 @@ That's all!
 ## Changelog
 
 ## [2.0.0] - 2020-04-18
-A major upgrade that addresses all reported bugs.
+A major upgrade that addresses all reported bugs including SSL renewals.
 
 ### Change
 - Custom path is used to store SSL certificates
