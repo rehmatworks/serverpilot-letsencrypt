@@ -3,7 +3,6 @@ Jinja2==2.10.3
 MarkupSafe==1.1.1
 python-nginx==1.5.3
 six==1.12.0
-rwssl==2.0.0
 termcolor==1.1.0
 validators==0.14.0
 certbot==0.39.0
