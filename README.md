@@ -85,4 +85,4 @@ A major upgrade that addresses all reported bugs.
 - Added validation after vhost files are written (and changes are reverted if errors encountered)
 
 # Bugs & Suggestions
-Although `rwssl` doesn't make any security-related changes, still if you notice something that's sensitive, please email me at **contact@rehmat.works** rather than opening an issue. For common suggestions & bug reports, you can use the issues section.
+For security-related issues, please email me at **contact@rehmat.works** and for common suggestions & bug reports, use the issues section.
