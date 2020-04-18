@@ -1,6 +1,8 @@
 # ServerPilot Let's Encrypt (`rwssl`) v2.x
 This Python utility allows you to automate the installation/uninstallation of SSL certificates from Let's Encrypt on ServerPilot servers. Both free servers (from old grand-fathered plan) and servers on premium plans are supported.
 
+![serverpilot-letsencrypt](https://raw.githubusercontent.com/rehmatworks/serverpilot-letsencrypt/master/rwssl.png "ServerPilto Let's Encrypt")
+
 ## Donations
 Donations always remind me that my program is needed and appreciated by the community. You can [**buy me a coffee here**](https://buymeacoffee.com/rehmat) if you really liked my work. This helps and encourages me to dedicate time for open source projects.
 
@@ -37,6 +39,8 @@ Only Python 3.5 and up supported so you shoul install & use rwssl package using 
 
 Once **rwssl** is installed, a command `rwssl` will become available in your terminal. You will have access to the following sub-commands in order to manage your server.
 
+**Update:** Please note that old commands aren't available anymore due to a recent major upgrade. Please check below table for new commands that come with rwssl. You can get help by typing `rwssl -h` as well.
+
 | Command | Details | Examples |
 | ------- | --- | -- |
 | getcert | Get letsencrypt cert for an app. | `rwssl getcert --app foo` |
@@ -64,5 +68,23 @@ rm /etc/cron.weekly/rwssl-sslrenewals
 
 That's all!
 
+## Changelog
+
+## [2.0.0] - 2020-04-18
+A major upgrade that addresses all reported bugs including SSL renewals.
+
+### Change
+- Custom path is used to store SSL certificates
+- Certificate is named after app name (Addresses missing cert path issue)
+- Improved vhost file parsing to get app details
+- Dropped support for Python 2.x (Only Python 3.x is supported)
+
+### Added
+- Using Jinja template engine to generate virtual host files from templates
+- Using a custom ACME verification location (To avoid initial verifications & renewal issues)
+- Using latest certbot Python package
+- ACME v2 protocol support
+- Added validation after vhost files are written (and changes are reverted if errors encountered)
+
 ## Bugs & Suggestions
-Although you should never encounter any security-related issues, but still if you find a security-related issue, please drop an email at contact[at]rehmat.works. For other common issues, you can use the issues section in this repo directly.
+For security-related issues, please email me at **contact@rehmat.works** and for common bug reports / feature requests, use the issues section.
