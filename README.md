@@ -58,6 +58,14 @@ To uninstall rwssl completely, run:
 pip3 uninstall rwssl
 ```
 
+As a CRON job is added for SSL renewals by rwssl, you can remove the CRON file by running:
+
+```bash
+rm /etc/cron.weekly/rwssl-sslrenewals
+```
+
+That's all!
+
 # Changelog
 
 ## [2.0.0] - 2020-04-18
@@ -76,13 +84,5 @@ A major upgrade that addresses all reported bugs.
 - ACME v2 protocol support
 - Added validation after vhost files are written (and changes are reverted if errors encountered)
 
-As a CRON job is added for SSL renewals by rwssl, you can remove the CRON file by running:
-
-```bash
-rm /etc/cron.weekly/rwssl-sslrenewals
-```
-
-That's all!
-
-## Bugs & Suggestions
-Although you should never encounter any security-related issues, but still if you find a security-related issue, please drop an email at contact[at]rehmat.works. For other common issues, you can use the issues section in this repo directly.
+# Bugs & Suggestions
+Although `rwssl` doesn't make any security-related changes, still if you notice something that's sensitive, please email me at **contact@rehmat.works** rather than opening an issue. For common suggestions & bug reports, you can use the issues section.
