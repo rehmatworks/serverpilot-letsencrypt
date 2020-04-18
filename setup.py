@@ -7,7 +7,7 @@ import shutil
 import sys
 
 sys.version_info < (3, 5)
-	sys.exit('Error: rwssl only works in Python 3.x but you are using an older version')
+	sys.exit('Error: rwssl only works in Python 3.x.')
 
 class SetupSslRenewCron(install):
 	def run(self):
