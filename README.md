@@ -58,6 +58,24 @@ To uninstall rwssl completely, run:
 pip3 uninstall rwssl
 ```
 
+# Changelog
+
+## [2.0.0] - 2020-04-18
+A major upgrade that addresses all reported bugs.
+
+### Change
+- Custom path is used to store SSL certificates
+- Certificate is named after app name (Addresses missing cert path issue)
+- Improved vhost file parsing to get app details
+- Dropped support for Python 2.x (Only Python 3.x is supported)
+
+### Added
+- Using Jinja template engine to generate virtual host files from templates
+- Using a custom ACME verification location (To avoid initial verifications & renewal issues)
+- Using latest certbot Python package
+- ACME v2 protocol support
+- Added validation after vhost files are written (and changes are reverted if errors encountered)
+
 As a CRON job is added for SSL renewals by rwssl, you can remove the CRON file by running:
 
 ```bash
