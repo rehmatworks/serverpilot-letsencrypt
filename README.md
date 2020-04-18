@@ -9,6 +9,7 @@ Donations always remind me that my program is needed and appreciated by the comm
 **If you are upgrading from an older version, first uninstall the older version completely before installing the latest version.**
 
 `pip3 uninstall rwssl`
+
 `pip unintall rwssl`
 
 And then proceed to the installation. Recommended way to install **rwssl** is via PIP.
