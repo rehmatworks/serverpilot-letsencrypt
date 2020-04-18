@@ -6,6 +6,7 @@ import json
 import validators
 from getpass import getpass
 import socket
+import re
 
 
 class ServerPilot:
@@ -73,8 +74,8 @@ class ServerPilot:
         else:
             s = c.filter('Server')[0]
         return {
-            'domains': list(filter(None, s.filter('Key', 'server_name')[0].as_dict.get('server_name').strip().split(' '))),
-            'user': list(filter(None, s.filter('Key', 'root')[0].as_dict.get('root').strip().split('/')))[2]
+            'domains': list(filter(None, re.sub('\s+', ' ', s.filter('Key', 'server_name')[0].as_dict.get('server_name')).split(' '))),
+            'user': list(filter(None, re.sub('\s+', ' ', s.filter('Key', 'root')[0].as_dict.get('root')).split('/')))[2]
         }
 
     def findapps(self):
