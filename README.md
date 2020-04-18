@@ -6,46 +6,32 @@ Donations always remind me that my program is needed and appreciated by the comm
 
 ## Getting Started
 
-**If you are upgrading from an older version, first uninstall the older version completely before installing the latest version.**
+** If you are using my VERY old bash script, you will have to delete it completely first from `/usr/local/bin/rwssl`. **
 
-`pip3 uninstall rwssl`
-
-`pip uninstall rwssl`
-
-And then proceed to the installation. Recommended way to install **rwssl** is via PIP.
-
-If PIP isn't installed on your system, you need to install it first. In addition to PIP, you need to install some other needed packages as well.
+Sign in as root user (or with sudo privileges) and install some needed packages:
 
 ```bash
-sudo apt-get -y install python3-pip build-essential libssl-dev libffi-dev python3-dev
+sudo apt-get update && apt-get -y install python3-pip build-essential libssl-dev libffi-dev python3-dev
 ```
 
-And then run:
+And then install the package from PyPi:
 
 ```bash
-pip3 install rwssl
+pip3 install --upgrade --force-reinstall rwssl
 ```
 
-The alternate way to install **rwssl** is cloning the repository:
+The alternate way to install **rwssl** is by cloning the repository:
 
 ```bash
-git clone https://github.com/rehmatworks/serverpilot-letsencrypt && cd serverpilot-letsencrypt && python3 setup.py install
+git clone https://github.com/rehmatworks/serverpilot-letsencrypt && cd serverpilot-letsencrypt
+pip3 install -r requirements.txt
+python3 setup.py install
 ```
 
-## Examples:
-Here are a few examples to get you started:
+**Only Python 3.5 and up supported.**
 
-#### Install SSL on app foo
-```bash
-rwssl getcert --app foo
-```
+## Available Commands with Examples:
 
-Uninstall SSL from the app foo:
-```bash
-rwssl removecert --app foo
-```
-
-## All Available Commands
 Once **rwssl** is installed, a command `rwssl` will become available in your terminal. You will have access to the following sub-commands in order to manage your server.
 
 | Command | Details | Examples |
