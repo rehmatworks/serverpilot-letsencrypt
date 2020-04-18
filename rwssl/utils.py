@@ -20,6 +20,7 @@ class ServerPilot:
         self.username = username
         self.app = app
         self.domains = []
+        self.acmetpl = 'acme.tpl'
 
     def setuser(self, username):
         self.username = username
@@ -181,7 +182,7 @@ class ServerPilot:
         letpl = os.path.join(self.nginxroot, self.vhostdir,
                              '{}.d'.format(self.app), self.acmeconf)
         if not os.path.exists(letpl):
-            tpldata = parsetpl('leroot.tpl', data={'leroot': self.leroot})
+            tpldata = parsetpl(self.acmetpl, data={'leroot': self.leroot})
             with open(letpl, 'w') as letplf:
                 letplf.write(tpldata)
                 reloadservice('nginx-sp')
