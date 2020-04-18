@@ -16,7 +16,7 @@ class ServerPilot:
         self.nginxroot = os.path.join(self.mainroot, 'etc', 'nginx-sp')
         self.sslroot = os.path.join(self.nginxroot, 'le-ssls')
         self.vhostdir = 'vhosts.d'
-        self.leroot = '/var/.rwssl/'
+        self.acmeroot = '/var/.rwssl/'
         self.acmeconf = 'acme.conf'
         self.username = username
         self.app = app
@@ -177,13 +177,13 @@ class ServerPilot:
         if not self.isvalidapp():
             raise Exception('A valid app name is not provided.')
 
-        if not os.path.exists(self.leroot):
-            os.makedirs(self.leroot)
+        if not os.path.exists(self.acmeroot):
+            os.makedirs(self.acmeroot)
 
         letpl = os.path.join(self.nginxroot, self.vhostdir,
                              '{}.d'.format(self.app), self.acmeconf)
         if not os.path.exists(letpl):
-            tpldata = parsetpl(self.acmetpl, data={'leroot': self.leroot})
+            tpldata = parsetpl(self.acmetpl, data={'acmeroot': self.acmeroot})
             with open(letpl, 'w') as letplf:
                 letplf.write(tpldata)
                 reloadservice('nginx-sp')
@@ -198,7 +198,7 @@ class ServerPilot:
         try:
             for domain in details.get('domains'):
                 cmd = "certbot certonly --non-interactive --dry-run --webroot -w {} --register-unsafely-without-email --agree-tos -d {}".format(
-                    self.leroot, domain)
+                    self.acmeroot, domain)
                 try:
                     runcmd(cmd)
                     validdoms.append(domain)
@@ -215,7 +215,7 @@ class ServerPilot:
 
         if len(validdoms) > 0:
             domainsstr = ''
-            webroot = self.leroot
+            webroot = self.acmeroot
             for vd in validdoms:
                 domainsstr += ' -d {}'.format(vd)
             cmd = "certbot certonly --non-interactive --agree-tos --register-unsafely-without-email --webroot -w {} --cert-name {} --config-dir {}{}".format(
