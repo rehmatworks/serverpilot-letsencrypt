@@ -37,6 +37,7 @@ setup(name='rwssl',
 		'python-nginx',
 		'validators',
 		'termcolor',
+		'tabulate',
 		'Jinja2',
 		'certbot'
 	],
