@@ -3,9 +3,6 @@ This Python utility allows you to automate the installation/uninstallation of SS
 
 ![serverpilot-letsencrypt](https://raw.githubusercontent.com/rehmatworks/serverpilot-letsencrypt/master/rwssl.png "ServerPilto Let's Encrypt")
 
-## Donations
-Donations always remind me that my program is needed and appreciated by the community. You can [**buy me a coffee here**](https://buymeacoffee.com/rehmat) if you really liked my work. This helps and encourages me to dedicate time for open source projects.
-
 ## Getting Started
 
 **If you are using my VERY old bash script, you will have to delete it completely first from `/usr/local/bin/rwssl`.**
