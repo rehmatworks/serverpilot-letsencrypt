@@ -73,7 +73,7 @@ That's all!
 ## [2.0.0] - 2020-04-18
 A major upgrade that addresses all reported bugs including SSL renewals.
 
-### Change
+### Changes
 - Custom path is used to store SSL certificates
 - Certificate is named after app name (Addresses missing cert path issue)
 - Improved vhost file parsing to get app details
