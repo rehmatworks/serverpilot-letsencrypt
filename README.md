@@ -78,6 +78,7 @@ A major upgrade that addresses all reported bugs including SSL renewals.
 - Certificate is named after app name (Addresses missing cert path issue)
 - Improved vhost file parsing to get app details
 - Dropped support for Python 2.x (Only Python 3.x is supported)
+- Using Let's Encrypt staging server (via dry-run) for domain validation (To address quota issues)
 
 ### Added
 - Using Jinja template engine to generate virtual host files from templates
