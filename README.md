@@ -14,10 +14,15 @@ sudo apt-get update  && \
 apt-get -y install python3-pip build-essential libssl-dev libffi-dev python3-dev
 ```
 
-And then install the package from PyPi:
+Uninstall older version if exists:
+```bash
+pip3 uninstall -y rwssl
+```
+
+And then install the latest version from PyPi:
 
 ```bash
-pip3 install --upgrade --force-reinstall rwssl
+pip3 install rwssl==2.0.4
 ```
 
 The alternate way to install **rwssl** is by cloning the repository:
