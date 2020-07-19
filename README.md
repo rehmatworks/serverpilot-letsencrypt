@@ -25,6 +25,12 @@ And then install the latest version from PyPi:
 pip3 install rwssl==2.0.4
 ```
 
+Verify that the installation worked. This should bring up the help menu for **rwssl**:
+
+```bash
+rwssl -h
+```
+
 The alternate way to install **rwssl** is by cloning the repository:
 
 ```bash
