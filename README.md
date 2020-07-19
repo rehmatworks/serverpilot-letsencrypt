@@ -83,6 +83,12 @@ Moreoever, a conf file `acme.conf` is created in conf directory of each app in v
 That's all!
 
 ## Changelog
+## [2.0.4] - 2020-07-19
+A minor upgrade that addresses renewal CRON issue and DNS-related bug.
+
+### Fixes
+- Fixed invalid DNS bug
+- Fixed renewal cron file generation
 
 ## [2.0.0] - 2020-04-18
 A major upgrade that addresses all reported bugs including SSL renewals.
