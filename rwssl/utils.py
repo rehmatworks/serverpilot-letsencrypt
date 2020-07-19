@@ -138,6 +138,7 @@ class ServerPilot:
             'serveralias': serveralias
         }
 
+
     def createnginxvhost(self):
         data = self.gettpldata()
         nginxmaindata = parsetpl('nginx-main.tpl')
@@ -223,11 +224,16 @@ class ServerPilot:
             runcmd(cmd)
             self.createnginxsslvhost()
             try:
-                # For backward compatibility, clean old SSL-vhost if
+                # For backward compatibility, clean old SSL-vhost if exists
                 oldsslconf = os.path.join(
                     self.nginxroot, self.vhostdir, '{}-ssl.conf'.format(self.app))
                 if os.path.exists(oldsslconf):
                     os.unlink(oldsslconf)
+                oldnonsslconf = os.path.join(
+                    self.nginxroot, self.vhostdir, '{}.d'.format(self.app), 'rwssl.nonssl_conf')
+                )
+                if os.path.exists(oldnonsslconf):
+                    os.unlink(oldnonsslconf)
                 reloadservice('nginx-sp')
                 print(colored('SSL activated for app {} (Domains Secured: {})'.format(
                     self.app, ' '.join(validdoms)), 'green'))
