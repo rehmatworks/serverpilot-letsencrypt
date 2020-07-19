@@ -34,7 +34,7 @@ rwssl -h
 The alternate way to install **rwssl** is by cloning the repository:
 
 ```bash
-cd && \
+cd ~/ && \
 git clone https://github.com/rehmatworks/serverpilot-letsencrypt  && \
 cd serverpilot-letsencrypt && \
 pip3 install -r requirements.txt && \
