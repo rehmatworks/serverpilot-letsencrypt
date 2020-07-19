@@ -5,13 +5,13 @@ This Python utility allows you to automate the installation/uninstallation of SS
 
 ## Getting Started
 
-Remove the very old script if you are still using it:
+First of all, sign in as root user (or with sudo privileges). Now remove the very old script if you are still using it:
 
 ```bash
 rm /usr/local/bin/rwssl
 ```
 
-Sign in as root user (or with sudo privileges) and install some needed packages:
+And then install some needed packages:
 
 ```bash
 apt-get update  && \
