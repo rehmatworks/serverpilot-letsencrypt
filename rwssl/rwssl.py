@@ -6,10 +6,18 @@ from termcolor import colored
 import sys
 import validators
 from .tools import *
+import shutil
 
 def main():
 
     sp = ServerPilot()
+
+    # Setup cron
+    cronpath = '/etc/cron.weekly/rwssl-sslrenewals'
+    if not os.path.exists(cronpath):
+        croncmd = '%s renew --non-interactive --config-dir /etc/nginx-sp/le-ssls --post-hook "service nginx-sp reload"\n' % shutil.which('certbot')
+        with open(cronpath, 'w') as cronfile:
+            cronfile.write(croncmd)
 
     ap = argparse.ArgumentParser(description='A powerful tool to manage SSLs on servers provisioned using ServerPilot.io.')
     subparsers = ap.add_subparsers(dest="action")
