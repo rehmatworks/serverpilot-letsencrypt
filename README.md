@@ -63,6 +63,8 @@ As a CRON job is added for SSL renewals by rwssl, you can remove the CRON file b
 rm /etc/cron.weekly/rwssl-sslrenewals
 ```
 
+Moreoever, a conf file `acme.conf` is created in conf directory of each app in vhosts.d. You should delete them as well. For example, if your app name is example, you should delete the conf file `/etc/nginx-sp/vhosts.d/example.d/acme.conf`. Repeat this step for each app where you used rwssl to get the SSL certificates.
+
 That's all!
 
 ## Changelog
