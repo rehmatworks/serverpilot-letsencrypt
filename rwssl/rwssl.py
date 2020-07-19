@@ -18,7 +18,7 @@ def main():
     if not os.path.exists(cronpath):
         croncmd = '%s renew --non-interactive --config-dir /etc/nginx-sp/le-ssls --post-hook "service nginx-sp reload"\n' % shutil.which('certbot')
         with open(cronpath, 'w') as cronfile:
-            cronfile.write(cronfile.writelines(['#!/bin/sh\n', cmd]))
+            cronfile.write(cronfile.writelines(['#!/bin/sh\n', croncmd]))
         maxexeccmd = "chmod +x {}".format(cronpath)
         FNULL = open(os.devnull, 'w')
         subprocess.check_call([maxexeccmd], shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
