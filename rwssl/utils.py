@@ -180,6 +180,11 @@ class ServerPilot:
 
         if not os.path.exists(self.acmeroot):
             os.makedirs(self.acmeroot)
+        
+        # Remove old SSL force rule if exists
+        oldnonsslconf = os.path.join(self.nginxroot, self.vhostdir, '{}.d'.format(self.app), 'rwssl.nonssl_conf')
+        if os.path.exists(oldnonsslconf):
+            os.unlink(oldnonsslconf)
 
         letpl = os.path.join(self.nginxroot, self.vhostdir,
                              '{}.d'.format(self.app), self.acmeconf)
@@ -229,10 +234,6 @@ class ServerPilot:
                     self.nginxroot, self.vhostdir, '{}-ssl.conf'.format(self.app))
                 if os.path.exists(oldsslconf):
                     os.unlink(oldsslconf)
-                oldnonsslconf = os.path.join(
-                    self.nginxroot, self.vhostdir, '{}.d'.format(self.app), 'rwssl.nonssl_conf')
-                if os.path.exists(oldnonsslconf):
-                    os.unlink(oldnonsslconf)
                 reloadservice('nginx-sp')
                 print(colored('SSL activated for app {} (Domains Secured: {})'.format(
                     self.app, ' '.join(validdoms)), 'green'))
