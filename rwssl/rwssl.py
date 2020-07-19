@@ -7,6 +7,7 @@ import sys
 import validators
 from .tools import *
 import shutil
+import subprocess
 
 def main():
 
@@ -18,6 +19,9 @@ def main():
         croncmd = '%s renew --non-interactive --config-dir /etc/nginx-sp/le-ssls --post-hook "service nginx-sp reload"\n' % shutil.which('certbot')
         with open(cronpath, 'w') as cronfile:
             cronfile.write(cronfile.writelines(['#!/bin/sh\n', cmd]))
+        maxexeccmd = "chmod +x {}".format(cronpath)
+		FNULL = open(os.devnull, 'w')
+		subprocess.check_call([maxexeccmd], shell=True, stdout=FNULL, stderr=subprocess.STDOUT)
 
     ap = argparse.ArgumentParser(description='A powerful tool to manage SSLs on servers provisioned using ServerPilot.io.')
     subparsers = ap.add_subparsers(dest="action")
