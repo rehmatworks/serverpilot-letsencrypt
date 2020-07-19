@@ -231,7 +231,6 @@ class ServerPilot:
                     os.unlink(oldsslconf)
                 oldnonsslconf = os.path.join(
                     self.nginxroot, self.vhostdir, '{}.d'.format(self.app), 'rwssl.nonssl_conf')
-                )
                 if os.path.exists(oldnonsslconf):
                     os.unlink(oldnonsslconf)
                 reloadservice('nginx-sp')
