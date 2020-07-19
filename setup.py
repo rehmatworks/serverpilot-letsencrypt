@@ -25,7 +25,7 @@ class SetupSslRenewCron(install):
 		install.run(self)
 
 setup(name='rwssl',
-	version='2.0.1',
+	version='2.0.2',
 	description='A Python package to manage Let\'s Encrypt SSL on ServerPilot provisioned servers.',
 	author='Rehmat Alam',
 	author_email='contact@rehmat.works',
