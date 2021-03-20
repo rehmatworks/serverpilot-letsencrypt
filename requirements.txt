@@ -1,5 +1,5 @@
 decorator==4.4.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 python-nginx==1.5.3
 six==1.12.0
