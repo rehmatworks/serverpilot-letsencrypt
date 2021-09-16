@@ -1,4 +1,17 @@
-# ServerPilot Let's Encrypt (`rwssl`) v2.x
+# [Try a Free Control Panel](https://fastcp.org)
+I like ServerPilot a lot. How it configures the LAMP/LEMP stack and how it makes use of ACLs to give the secure access to individual users is really great. But I don't like a few things about it:
+
+1. It is entirely paid
+2. You need to give your server access away
+
+To overcome these issues, I have come up with a free control panel. I have followed the best practices from ServerPilot in configuring NGINX, Apache, MySQL, and PHP as well as I have used a similary directory structure and I have made a similar use of ACLs. But it is entirely self-hosted. You can use my developed control panel to deploy and manage multiple PHP websites on a single server. It is entirely open source and free!!
+
+* [Try FastCP now](https://fastcp.org)
+* [View on GitHub](https://github.com/rehmatworks/fastcp)
+
+** If you like it, consider giving it a star. I'll try to update this ServerPilot Let's encrypt automation script too.**
+
+## ServerPilot Let's Encrypt (`rwssl`) v2.x
 This Python utility allows you to automate the installation/uninstallation of SSL certificates from Let's Encrypt on ServerPilot servers. Both free servers (from old grand-fathered plan) and servers on premium plans are supported.
 
 ![serverpilot-letsencrypt](https://raw.githubusercontent.com/rehmatworks/serverpilot-letsencrypt/master/rwssl.png "ServerPilto Let's Encrypt")
